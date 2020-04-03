@@ -122,7 +122,11 @@ final class Siawood_Products_Plugin {
 		 */
 		register_deactivation_hook(
 			__FILE__,
-			array( $this, 'deactivate' )
+			function () {
+				$this->deactivate(
+					new Deactivator()
+				);
+			}
 		);
 		/**
 		 * Register uninstall hook.
@@ -149,6 +153,18 @@ final class Siawood_Products_Plugin {
 	 */
 	public function activate( Activator $activator_object ) {
 		$activator_object->activate();
+	}
+
+	/**
+	 * Call deactivate method.
+	 * This function calls deactivate method from Dectivator class.
+	 * You can use from this method to run every thing you need when plugin is deactivated.
+	 *
+	 * @access public
+	 * @since  1.0.0
+	 */
+	public function deactivate( Deactivator $deactivator_object ) {
+		$deactivator_object->deactivate();
 	}
 
 	/**
@@ -200,18 +216,6 @@ final class Siawood_Products_Plugin {
 			]
 		);
 		$this->core_object->init_core();
-	}
-
-	/**
-	 * Call deactivate method.
-	 * This function calls deactivate method from Dectivator class.
-	 * You can use from this method to run every thing you need when plugin is deactivated.
-	 *
-	 * @access public
-	 * @since  1.0.0
-	 */
-	public function deactivate() {
-		Deactivator::deactivate();
 	}
 }
 

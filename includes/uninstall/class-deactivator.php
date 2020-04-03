@@ -8,10 +8,13 @@
  * @author     Mehdi Soltani Neshan <soltani.n.mehdi@gmail.com>
  * @license    https://www.gnu.org/licenses/gpl-3.0.txt GNU/GPLv3
  * @link       https://wpwebmaster.ir
- * @since      1.0.0
+ * @since      1.0.1
  */
 
 namespace Siawood_Products\Includes\Uninstall;
+
+use Siawood_Products\Includes\Functions\Current_User;
+use Siawood_Products\Includes\Functions\Logger;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -25,22 +28,32 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author     Mehdi Soltani Neshan <soltani.n.mehdi@gmail.com>
  */
 class Deactivator {
+	use Current_User;
+	use Logger;
 
 	/**
 	 * Run related tasks when plugin is deactivated
 	 *
 	 * @access public
-	 * @since  1.0.0
-	 * @static
+	 * @since  1.0.1
 	 */
-	public static function deactivate() {
+	public function deactivate() {
 
-		if ( get_option( 'siawood_products_plugin_setting_option2' ) ) {
-			update_option(
-				'siawood_products_plugin_setting_option2',
-				'After de-activation'
-			);
-		}
+		$this->register_deactivator_user();
+		
+	}
+
+	/**
+	 * Register user who de-activate the plugin
+	 */
+	public function register_deactivator_user() {
+
+		$current_user = $this->get_this_login_user();
+		$this->append_log_in_text_file(
+			'The user with login of: "' . $current_user->user_login . '" and display name of: "' . $current_user->display_name
+			. '" de-activated this plugin',
+			SIAWOOD_PRODUCTS_LOGS . 'deactivator-logs.txt',
+			'De-Activator User' );
 
 	}
 

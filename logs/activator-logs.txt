@@ -1,3 +1,6 @@
 Log message of : Activator User [on 2020-04-03  12:45:23]
 The user with login of: "mehdi" and display name of: "mehdi" activated this plugin
 
+Log message of : Activator User [on 2020-04-03  16:41:18]
+The user with login of: "mehdi" and display name of: "mehdi" activated this plugin
+

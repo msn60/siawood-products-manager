@@ -1,0 +1,3 @@
+Log message of : De-Activator User [on 2020-04-03  16:41:49]
+The user with login of: "mehdi" and display name of: "mehdi" de-activated this plugin
+
