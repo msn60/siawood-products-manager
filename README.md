@@ -1,6 +1,6 @@
 # Siawood Products Manager Plugin for Woocommerce
 
-* Contributors: [Mehdi Soltani](https://github.com/msn60)
+* Contributors: [Mehdi Soltani](https://wpwebmaster.ir/author/mehdi-soltani/)
 
 
 
