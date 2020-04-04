@@ -28,7 +28,7 @@ use Siawood_Products\Includes\Interfaces\{
 };
 use Siawood_Products\Includes\Config\Initial_Value;
 use Siawood_Products\Includes\Functions\{
-	Init_Functions, Utility, Check_Type
+	Init_Functions, Logger, Utility, Check_Type, Web_Service
 };
 
 /**
@@ -47,6 +47,8 @@ use Siawood_Products\Includes\Functions\{
 class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	use Utility;
 	use Check_Type;
+	use Web_Service;
+	use Logger;
 	/**
 	 * The unique identifier of this plugin.
 	 *
@@ -170,6 +172,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		$this->register_add_filter();
 		$this->set_shortcodes();
 		$this->show_admin_notice();
+
 	}
 
 	/**
@@ -226,6 +229,30 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 				$admin_notice->register_add_action();
 			}
 		}
+	}
+
+	public function ghanbar() {
+
+		$fp            = fopen( SIAWOOD_PRODUCTS_LOGS . 'list-of-products.txt', 'a' );//opens file in append mode
+		$count         = 0;
+		$gholam_string = '';
+
+
+		$results = $this->get_webservice_data( 'http://94.139.176.25:890/api/stock' );
+		foreach ( $results['product_items'] as $item ) {
+			$count ++;
+			//echo 'SKU: ' . $item['sku'] . ' and stock: ' . $item['stock']. '<br>';
+			$gholam_string .= 'SKU: ' . $item['sku'] . ' and stock: ' . $item['stock'] . PHP_EOL;
+			/*$this->append_log_in_text_file(
+				'SKU: ' . $item['sku'] . ' and stock: ' . $item['stock'],
+				SIAWOOD_PRODUCTS_LOGS . 'list-of-products.txt', 'ghanbar' );*/
+		}
+		fwrite( $fp, $gholam_string );
+
+		fwrite( $fp, 'count: ' . $count . PHP_EOL );
+		fclose( $fp );
+		/*var_dump( $results['count'] );
+		var_dump( $results['product_items']['sku'] );*/
 	}
 
 	/**

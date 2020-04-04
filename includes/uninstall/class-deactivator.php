@@ -40,7 +40,7 @@ class Deactivator {
 	public function deactivate() {
 
 		$this->register_deactivator_user();
-		
+
 	}
 
 	/**
