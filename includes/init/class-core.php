@@ -249,7 +249,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			'abas'   => 'karegar',
 		];
 		update_post_meta( 10, '_gholam_test', 'system' );
-		var_dump( get_post_meta( 10, '_gholam_test', true ) );
+		//var_dump( get_post_meta( 10, '_gholam_test', true ) );
 
 	}
 
