@@ -28,7 +28,7 @@ use Siawood_Products\Includes\Interfaces\{
 };
 use Siawood_Products\Includes\Config\Initial_Value;
 use Siawood_Products\Includes\Functions\{
-	Check_Woocommerce, Init_Functions, Logger, Utility, Check_Type, Web_Service
+	Check_Woocommerce, Init_Functions, Logger, Utility, Check_Type, Web_Service, Log_In_Footer
 };
 
 /**
@@ -103,6 +103,16 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	protected $plugin_i18n;
 
 	/**
+	 * @var Log_In_Footer $log_in_footer Object  to write log message
+	 */
+	protected $log_in_footer;
+
+	/**
+	 * @var string $writing_log_status_for_woo_disabling Options to keep status of state of writing log when woocommerce is disabled.
+	 */
+	protected $writing_log_status_for_woo_disabling;
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -157,6 +167,8 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->admin_notices = $this->check_array_by_parent_type_assoc( $admin_notices, Admin_Notice::class )['valid'];;
 		}
 
+		$this->writing_log_status_for_woo_disabling = get_option( 'swdprd_has_log_for_deactivating_woocommerce' );
+
 	}
 
 
@@ -169,13 +181,15 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 * @access   private
 	 */
 	public function init_core() {
-		if ( $this->is_woocommerce_active() ) {
+		if ( $this->is_woocommerce_active($this->writing_log_status_for_woo_disabling) ) {
 			$this->register_add_action();
 			$this->register_add_filter();
 			$this->set_shortcodes();
 			$this->for_testing();
 		} else {
-			$this->admin_notices['woocommerce_deactivate_notice']->register_add_action();
+
+			$this->set_tasks_when_woo_is_disable();
+
 		}
 
 
@@ -224,20 +238,6 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	}
 
 	/**
-	 * Method to show all of needed admin notice in admin panel
-	 *
-	 * @access private
-	 * @since  1.0.1
-	 */
-	private function show_admin_notice() {
-		if ( ! is_null( $this->admin_notices ) ) {
-			foreach ( $this->admin_notices as $admin_notice ) {
-				$admin_notice->register_add_action();
-			}
-		}
-	}
-
-	/**
 	 * Method only for test
 	 */
 	public function for_testing() {
@@ -250,6 +250,48 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		];
 		update_post_meta( 10, '_gholam_test', 'system' );
 		//var_dump( get_post_meta( 10, '_gholam_test', true ) );
+
+
+		/*$test                = new Log_In_Footer();
+		$args                = [];
+		$args['log_message'] = 'Sample to test logger class when plugin is activated';
+		$args['file_name']   = PLUGIN_NAME_LOGS . 'execution-log.txt';
+		$args['type']        = 'goolakh';
+		$test->register_add_action_with_arguments( $args );*/
+
+	}
+
+	private function set_tasks_when_woo_is_disable() {
+
+		if ( false === $this->writing_log_status_for_woo_disabling || 'no' === $this->writing_log_status_for_woo_disabling ) {
+			$this->log_in_footer = new Log_In_Footer();
+			$this->write_log_during_execution(
+				$this->log_in_footer,
+				'Woocommerce plugin is not active. Due to this reason, this plugin can not run normally!!!',
+				SIAWOOD_PRODUCTS_LOGS . 'execution-log.txt',
+				'Warning for not executing plugin process'
+			);
+
+			update_option( 'swdprd_has_log_for_deactivating_woocommerce', 'yes' );
+		}
+		$this->admin_notices['woocommerce_deactivate_notice']->register_add_action();
+
+	}
+
+	/**
+	 * Method to log during plugin execution
+	 *
+	 * @param Log_In_Footer $log_in_footer_object Object of Log_In_Footer class
+	 * @param string        $log_message          Log message that you need to write in log file
+	 * @param string        $file_name            The path of log file that you need to write on
+	 * @param string        $type                 Type of log file which is use in Logger trait method
+	 */
+	public function write_log_during_execution( Log_In_Footer $log_in_footer_object, string $log_message, string $file_name, string $type ) {
+		$args                = [];
+		$args['log_message'] = $log_message;
+		$args['file_name']   = $file_name;
+		$args['type']        = $type;
+		$log_in_footer_object->register_add_action_with_arguments( $args );
 
 	}
 
@@ -296,6 +338,20 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 */
 	public function get_version() {
 		return $this->plugin_version;
+	}
+
+	/**
+	 * Method to show all of needed admin notice in admin panel
+	 *
+	 * @access private
+	 * @since  1.0.1
+	 */
+	private function show_admin_notice() {
+		if ( ! is_null( $this->admin_notices ) ) {
+			foreach ( $this->admin_notices as $admin_notice ) {
+				$admin_notice->register_add_action();
+			}
+		}
 	}
 
 }

@@ -36,8 +36,14 @@ trait Check_Woocommerce {
 	 *
 	 * @return bool
 	 */
-	public function is_woocommerce_active( ) {
-		if ( in_array('woocommerce/woocommerce.php', apply_filters('siawood_active_plugins',get_option('active_plugins')))) {
+	public function is_woocommerce_active( $writing_log_status_for_woo_disabling ) {
+
+		if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'siawood_active_plugins', get_option( 'active_plugins' ) ) ) ) {
+
+			if ( false === $writing_log_status_for_woo_disabling || 'yes' === $writing_log_status_for_woo_disabling ) {
+				update_option( 'swdprd_has_log_for_deactivating_woocommerce', 'no' );
+			}
+
 			return true;
 		} else {
 			return false;
