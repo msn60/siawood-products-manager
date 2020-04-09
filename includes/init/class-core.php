@@ -28,7 +28,7 @@ use Siawood_Products\Includes\Interfaces\{
 };
 use Siawood_Products\Includes\Config\Initial_Value;
 use Siawood_Products\Includes\Functions\{
-	Init_Functions, Logger, Utility, Check_Type, Web_Service
+	Check_Woocommerce, Init_Functions, Logger, Utility, Check_Type, Web_Service
 };
 
 /**
@@ -45,6 +45,7 @@ use Siawood_Products\Includes\Functions\{
  * @author     Mehdi Soltani Neshan <soltani.n.mehdi@gmail.com>
  */
 class Core implements Action_Hook_Interface, Filter_Hook_Interface {
+	use Check_Woocommerce;
 	use Utility;
 	use Check_Type;
 	use Web_Service;
@@ -153,7 +154,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->shortcodes = $this->check_array_by_parent_type( $shortcodes, Shortcode::class )['valid'];;
 		}
 		if ( ! is_null( $admin_notices ) ) {
-			$this->admin_notices = $this->check_array_by_parent_type( $admin_notices, Admin_Notice::class )['valid'];;
+			$this->admin_notices = $this->check_array_by_parent_type_assoc( $admin_notices, Admin_Notice::class )['valid'];;
 		}
 
 	}
@@ -168,10 +169,15 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 * @access   private
 	 */
 	public function init_core() {
-		$this->register_add_action();
-		$this->register_add_filter();
-		$this->set_shortcodes();
-		$this->show_admin_notice();
+		if ( $this->is_woocommerce_active() ) {
+			$this->register_add_action();
+			$this->register_add_filter();
+			$this->set_shortcodes();
+			$this->for_testing();
+		} else {
+			$this->admin_notices['woocommerce_deactivate_notice']->register_add_action();
+		}
+
 
 	}
 
@@ -229,6 +235,22 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 				$admin_notice->register_add_action();
 			}
 		}
+	}
+
+	/**
+	 * Method only for test
+	 */
+	public function for_testing() {
+
+		/*$active_plugins = get_option('active_plugins');
+		var_dump($active_plugins);*/
+		$test = [
+			'gholam' => 'bandari',
+			'abas'   => 'karegar',
+		];
+		update_post_meta( 10, '_gholam_test', 'system' );
+		var_dump( get_post_meta( 10, '_gholam_test', true ) );
+
 	}
 
 	public function ghanbar() {

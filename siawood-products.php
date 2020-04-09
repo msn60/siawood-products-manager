@@ -31,7 +31,7 @@ use Siawood_Products\Includes\Parts\Other\Remove_Post_Column;
 use Siawood_Products\Includes\Uninstall\{
 	Deactivator, Uninstall
 };
-use Siawood_Products\Includes\Admin\Notices\Admin_Notice1;
+use Siawood_Products\Includes\Admin\Notices\Woocommerce_Deactive_Notice;
 
 use Siawood_Products\Includes\Functions\Init_Functions;
 use Siawood_Products\Includes\Parts\Shortcodes\Complete_Shortcode;
@@ -212,7 +212,7 @@ final class Siawood_Products_Plugin {
 				new Complete_Shortcode( $this->initial_values->sample_complete_shortcode() ),
 			],
 			[
-				new Admin_Notice1()
+				'woocommerce_deactivate_notice' => new Woocommerce_Deactive_Notice()
 			]
 		);
 		$this->core_object->init_core();
