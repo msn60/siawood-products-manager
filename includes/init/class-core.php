@@ -31,6 +31,7 @@ use Siawood_Products\Includes\Functions\{
 	Check_Woocommerce, Init_Functions, Logger, Utility, Check_Type, Web_Service, Log_In_Footer
 };
 
+
 /**
  * The core plugin class.
  *
@@ -181,11 +182,12 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 * @access   private
 	 */
 	public function init_core() {
-		if ( $this->is_woocommerce_active($this->writing_log_status_for_woo_disabling) ) {
+		if ( $this->is_woocommerce_active( $this->writing_log_status_for_woo_disabling ) ) {
 			$this->register_add_action();
 			$this->register_add_filter();
 			$this->set_shortcodes();
-			$this->for_testing();
+			add_filter( 'woocommerce_get_settings_pages', [ $this, 'add_woocommerce_setting_page' ] );
+			//$this->for_testing();
 		} else {
 
 			$this->set_tasks_when_woo_is_disable();
@@ -193,6 +195,11 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		}
 
 
+	}
+
+	public function add_woocommerce_setting_page(  ) {
+		$settings[] = include_once SIAWOOD_PRODUCTS_PATH .  'includes/admin/class-siawood-wc-settings-tab.php';
+		return $settings;
 	}
 
 	/**
@@ -238,29 +245,8 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	}
 
 	/**
-	 * Method only for test
+	 * Tasks which is needed if Woocommerce is not active.
 	 */
-	public function for_testing() {
-
-		/*$active_plugins = get_option('active_plugins');
-		var_dump($active_plugins);*/
-		$test = [
-			'gholam' => 'bandari',
-			'abas'   => 'karegar',
-		];
-		update_post_meta( 10, '_gholam_test', 'system' );
-		//var_dump( get_post_meta( 10, '_gholam_test', true ) );
-
-
-		/*$test                = new Log_In_Footer();
-		$args                = [];
-		$args['log_message'] = 'Sample to test logger class when plugin is activated';
-		$args['file_name']   = PLUGIN_NAME_LOGS . 'execution-log.txt';
-		$args['type']        = 'goolakh';
-		$test->register_add_action_with_arguments( $args );*/
-
-	}
-
 	private function set_tasks_when_woo_is_disable() {
 
 		if ( false === $this->writing_log_status_for_woo_disabling || 'no' === $this->writing_log_status_for_woo_disabling ) {
@@ -271,7 +257,6 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 				SIAWOOD_PRODUCTS_LOGS . 'execution-log.txt',
 				'Warning for not executing plugin process'
 			);
-
 			update_option( 'swdprd_has_log_for_deactivating_woocommerce', 'yes' );
 		}
 		$this->admin_notices['woocommerce_deactivate_notice']->register_add_action();
@@ -295,12 +280,37 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 
 	}
 
+	/**
+	 * Method only for test
+	 */
+	public function for_testing() {
+
+		/*$active_plugins = get_option('active_plugins');
+		var_dump($active_plugins);*/
+		$test = [
+			'gholam' => 'bandari',
+			'abas'   => 'karegar',
+		];
+		update_post_meta( 10, '_gholam_test', 'system' );
+		//var_dump( get_post_meta( 10, '_gholam_test', true ) );
+
+
+		if ( class_exists( 'WC_Settings_Page' ) ) {
+			var_dump( 'exists' );
+		} else {
+			var_dump( ' not exists' );
+		}
+
+
+
+
+	}
+
 	public function ghanbar() {
 
 		$fp            = fopen( SIAWOOD_PRODUCTS_LOGS . 'list-of-products.txt', 'a' );//opens file in append mode
 		$count         = 0;
 		$gholam_string = '';
-
 
 		$results = $this->get_webservice_data( 'http://94.139.176.25:890/api/stock' );
 		foreach ( $results['product_items'] as $item ) {
