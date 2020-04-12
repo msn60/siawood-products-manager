@@ -13,6 +13,8 @@
 
 namespace Siawood_Products\Includes\Admin;
 
+use Siawood_Products\Includes\Config\Siawood_Initial_Values;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -26,9 +28,21 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author     Mehdi Soltani Neshan <soltani.n.mehdi@gmail.com>
  * @link       https://wpwebmaster.ir
  *
+ * @see        https://www.battlestardigital.com/how-to-extend-woocommerce-with-the-wordpress-plugin-boilerplate/
+ * @see        https://www.speakinginbytes.com/2014/07/woocommerce-settings-tab/
+ * @see        wp-content/plugins/woocommerce/includes/admin/wc-admin-functions.php & woocommerce_admin_fields() method
+ * @see        wp-content/plugins/woocommerce/includes/admin/class-wc-admin-settings.php
+ *
+ * @see        https://docs.woocommerce.com/document/adding-a-section-to-a-settings-tab/
+ * @see        https://www.tychesoftwares.com/how-to-add-custom-sections-fields-in-woocommerce-settings/
+ * @see        https://stackoverflow.com/questions/54502116/add-a-custom-settings-tab-to-woocommerce-settings-for-customer-list-content
+ * @see        https://www.skyverge.com/blog/post_series/build-woocommerce-extension/
+ * @see        https://www.skyverge.com/blog/add-plugin-settings-to-woocommerce-part-1/
+ * @see        https://gist.github.com/neo99/eec01b9df3448ee27ee6
+ *
  */
 class Siawood_WC_Settings_Tab extends \WC_Settings_Page {
-
+	use Siawood_Initial_Values;
 
 	public function __construct() {
 
@@ -58,6 +72,14 @@ class Siawood_WC_Settings_Tab extends \WC_Settings_Page {
 		return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
 	}
 
+	/**
+	 * Output the settings
+	 */
+	public function output() {
+		$settings = $this->get_settings();
+
+		\WC_Admin_Settings::output_fields( $settings );
+	}
 
 	/**
 	 * Get settings array
@@ -67,7 +89,8 @@ class Siawood_WC_Settings_Tab extends \WC_Settings_Page {
 	public function get_settings() {
 
 		global $current_section;
-		$prefix = 'msn_siawood';
+		$prefix = 'swdprd_';
+		$settings = [];
 
 		switch ( $current_section ) {
 			case 'log':
@@ -76,21 +99,10 @@ class Siawood_WC_Settings_Tab extends \WC_Settings_Page {
 				);
 				break;
 			default:
-				$settings = array(
-					array()
-				);
+				$settings = $this->get_siawood_general_settings_page_elements($prefix);
 		}
 
 		return apply_filters( 'woocommerce_get_settings_' . $this->id, $settings, $current_section );
-	}
-
-	/**
-	 * Output the settings
-	 */
-	public function output() {
-		$settings = $this->get_settings();
-
-		\WC_Admin_Settings::output_fields( $settings );
 	}
 
 	/**

@@ -285,24 +285,12 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 */
 	public function for_testing() {
 
-		/*$active_plugins = get_option('active_plugins');
-		var_dump($active_plugins);*/
 		$test = [
 			'gholam' => 'bandari',
 			'abas'   => 'karegar',
 		];
 		update_post_meta( 10, '_gholam_test', 'system' );
 		//var_dump( get_post_meta( 10, '_gholam_test', true ) );
-
-
-		if ( class_exists( 'WC_Settings_Page' ) ) {
-			var_dump( 'exists' );
-		} else {
-			var_dump( ' not exists' );
-		}
-
-
-
 
 	}
 
