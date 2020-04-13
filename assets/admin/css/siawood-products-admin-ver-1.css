@@ -1,1 +1,11 @@
 /*Admin CSS Version 1*/
+.msn-report-section {
+    background: white;
+    max-width: 800px;
+    border: 1px solid;
+    border-radius: 7px;
+    padding: 20px;
+    direction: ltr;
+    font-size: 1rem;
+    line-height: 1.8rem;
+}

@@ -197,11 +197,6 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 
 	}
 
-	public function add_woocommerce_setting_page(  ) {
-		$settings[] = include_once SIAWOOD_PRODUCTS_PATH .  'includes/admin/class-siawood-wc-settings-tab.php';
-		return $settings;
-	}
-
 	/**
 	 * Register all needed add_actions for this plugin
 	 *
@@ -210,12 +205,15 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 *
 	 */
 	public function register_add_action() {
+		if ( ! is_null( $this->admin_hooks ) ) {
+			$this->admin_hooks->register_add_action();
+		}
 		if ( ! is_null( $this->init_functions ) ) {
 			$this->init_functions->register_add_action();
 		}
-		if ( ! is_null( $this->plugin_i18n ) ) {
+		/*if ( ! is_null( $this->plugin_i18n ) ) {
 			$this->plugin_i18n->register_add_action();
-		}
+		}*/
 
 		/*if ( is_admin() ) {
 
@@ -278,6 +276,12 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		$args['type']        = $type;
 		$log_in_footer_object->register_add_action_with_arguments( $args );
 
+	}
+
+	public function add_woocommerce_setting_page() {
+		$settings[] = include_once SIAWOOD_PRODUCTS_PATH . 'includes/admin/class-siawood-wc-settings-tab.php';
+
+		return $settings;
 	}
 
 	/**
