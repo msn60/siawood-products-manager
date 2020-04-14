@@ -28,7 +28,7 @@ use Siawood_Products\Includes\Interfaces\{
 };
 use Siawood_Products\Includes\Config\Initial_Value;
 use Siawood_Products\Includes\Functions\{
-	Check_Woocommerce, Init_Functions, Logger, Utility, Check_Type, Web_Service, Log_In_Footer
+	Check_Woocommerce, Init_Functions, Logger, Url_Checker, Utility, Check_Type, Web_Service, Log_In_Footer
 };
 
 
@@ -51,6 +51,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	use Check_Type;
 	use Web_Service;
 	use Logger;
+	use Url_Checker;
 	/**
 	 * The unique identifier of this plugin.
 	 *
@@ -114,6 +115,11 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	protected $writing_log_status_for_woo_disabling;
 
 	/**
+	 * @var string $webservice_address Webservice address to get stocks amounts from third party service
+	 */
+	protected $webservice_address;
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -169,6 +175,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		}
 
 		$this->writing_log_status_for_woo_disabling = get_option( 'swdprd_has_log_for_deactivating_woocommerce' );
+		$this->webservice_address                   = get_option( 'swdprd_webservice_ip_address' );
 
 	}
 
@@ -186,6 +193,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->register_add_action();
 			$this->register_add_filter();
 			$this->set_shortcodes();
+			$this->run_stock_updater();
 			add_filter( 'woocommerce_get_settings_pages', [ $this, 'add_woocommerce_setting_page' ] );
 			//$this->for_testing();
 		} else {
@@ -243,6 +251,19 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	}
 
 	/**
+	 * Run updater to update stock amounts for all products in Woocommerce
+	 */
+	private function run_stock_updater() {
+		if ( ! $this->is_valid_url( $this->webservice_address ) ) {
+			var_dump( 'bia dadash' );
+		} else {
+			$matches = $this->get_matches_in_url( $this->webservice_address );
+			var_dump( $matches );
+
+		}
+	}
+
+	/**
 	 * Tasks which is needed if Woocommerce is not active.
 	 */
 	private function set_tasks_when_woo_is_disable() {
@@ -278,17 +299,13 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 
 	}
 
-	public function add_woocommerce_setting_page() {
-		$settings[] = include_once SIAWOOD_PRODUCTS_PATH . 'includes/admin/class-siawood-wc-settings-tab.php';
-
-		return $settings;
-	}
-
 	/**
 	 * Method only for test
 	 */
 	public function for_testing() {
 
+
+		//var_dump($matches);
 		$test = [
 			'gholam' => 'bandari',
 			'abas'   => 'karegar',
@@ -296,6 +313,12 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		update_post_meta( 10, '_gholam_test', 'system' );
 		//var_dump( get_post_meta( 10, '_gholam_test', true ) );
 
+	}
+
+	public function add_woocommerce_setting_page() {
+		$settings[] = include_once SIAWOOD_PRODUCTS_PATH . 'includes/admin/class-siawood-wc-settings-tab.php';
+
+		return $settings;
 	}
 
 	public function ghanbar() {
