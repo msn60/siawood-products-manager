@@ -15,3 +15,25 @@ Woocommerce plugin is not active. Due to this reason, this plugin can not run no
 
 Log message of : Warning for not executing plugin process [on 2020-04-09  20:15:47]
 Woocommerce plugin is not active. Due to this reason, this plugin can not run normally!!!
+
+Log message of : Warning for not executing plugin process [on 2020-04-14  12:31:24]
+Woocommerce plugin is not active. Due to this reason, this plugin can not run normally!!!
+
+Log message of : Warning for not executing plugin process [on 2020-04-14  14:27:32]
+URL for updating stocks is wrong and you must set it in Siawood setting page again!!!
+
+Log message of : Warning for not executing plugin process [on 2020-04-14  14:28:04]
+URL for updating stocks is wrong and you must set it in Siawood setting page again!!!
+
+Log message of : Warning for not executing plugin process [on 2020-04-14  14:28:13]
+URL for updating stocks is wrong and you must set it in Siawood setting page again!!!
+
+Log message of : Warning for not executing plugin process [on 2020-04-14  14:28:32]
+URL for updating stocks is wrong and you must set it in Siawood setting page again!!!
+
+Log message of : Warning for not executing plugin process [on 2020-04-14  15:01:44]
+URL for updating stocks is wrong and you must set it in Siawood setting page again!!!
+
+Log message of : Warning for not executing plugin process [on 2020-04-14  15:12:01]
+URL for updating stocks is wrong and you must set it in Siawood setting page again!!!
+

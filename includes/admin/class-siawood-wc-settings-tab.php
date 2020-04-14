@@ -112,11 +112,14 @@ class Siawood_WC_Settings_Tab extends \WC_Settings_Page {
 	 * @since 1.0
 	 */
 	public function save() {
+		/*global $current_tab;
+		var_dump($current_tab);*/
+		// TODO: admin notice must show after integration settings save
+		//https://github.com/woocommerce/woocommerce/issues/16221
 		$settings = $this->get_settings();
 
 		\WC_Admin_Settings::save_fields( $settings );
 	}
-
 
 }
 

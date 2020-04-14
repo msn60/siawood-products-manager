@@ -115,6 +115,11 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	protected $writing_log_status_for_woo_disabling;
 
 	/**
+	 * @var string $writing_log_status_for_woo_disabling Options to keep status of state of writing log when url is wrong.
+	 */
+	protected $writing_log_status_for_wrong_url;
+
+	/**
 	 * @var string $webservice_address Webservice address to get stocks amounts from third party service
 	 */
 	protected $webservice_address;
@@ -131,8 +136,8 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	public function __construct(
 		Initial_Value $initial_values,
 		Custom_Cron_Schedule $custom_cron_schedule = null,
-		Init_Functions $init_functions = null,
-		I18n $plugin_i18n = null,
+		/*Init_Functions $init_functions = null,
+		I18n $plugin_i18n = null,*/
 		Admin_Hook $admin_hooks = null,
 		array $shortcodes = null,
 		array $admin_notices = null
@@ -151,13 +156,13 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 
 		$this->initial_values = $initial_values;
 
-		if ( ! is_null( $init_functions ) ) {
+		/*if ( ! is_null( $init_functions ) ) {
 			$this->init_functions = $init_functions;
 		}
 
 		if ( ! is_null( $plugin_i18n ) ) {
 			$this->plugin_i18n = $plugin_i18n;
-		}
+		}*/
 
 		if ( ! is_null( $admin_hooks ) ) {
 			$this->admin_hooks = $admin_hooks;
@@ -175,6 +180,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		}
 
 		$this->writing_log_status_for_woo_disabling = get_option( 'swdprd_has_log_for_deactivating_woocommerce' );
+		$this->writing_log_status_for_wrong_url     = get_option( 'swdprd_has_log_for_wrong_url' );
 		$this->webservice_address                   = get_option( 'swdprd_webservice_ip_address' );
 
 	}
@@ -193,12 +199,15 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->register_add_action();
 			$this->register_add_filter();
 			$this->set_shortcodes();
-			$this->run_stock_updater();
+
+			if ( $this->check_before_start_update() ) {
+				$this->run_stock_updater();
+			}
 			add_filter( 'woocommerce_get_settings_pages', [ $this, 'add_woocommerce_setting_page' ] );
 			//$this->for_testing();
 		} else {
 
-			$this->set_tasks_when_woo_is_disable();
+			$this->set_tasks_when_woo_is_disable( new Log_In_Footer() );
 
 		}
 
@@ -216,9 +225,9 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		if ( ! is_null( $this->admin_hooks ) ) {
 			$this->admin_hooks->register_add_action();
 		}
-		if ( ! is_null( $this->init_functions ) ) {
+		/*if ( ! is_null( $this->init_functions ) ) {
 			$this->init_functions->register_add_action();
-		}
+		}*/
 		/*if ( ! is_null( $this->plugin_i18n ) ) {
 			$this->plugin_i18n->register_add_action();
 		}*/
@@ -251,34 +260,39 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	}
 
 	/**
-	 * Run updater to update stock amounts for all products in Woocommerce
+	 * Method to check needed data for update before starting update process
+	 *
+	 * @return bool True if all of needed parts are exist for starting update process
 	 */
-	private function run_stock_updater() {
+	private function check_before_start_update() {
 		if ( ! $this->is_valid_url( $this->webservice_address ) ) {
-			var_dump( 'bia dadash' );
+			$this->set_tasks_when_url_wrong( new Log_In_Footer() );
+			return false;
 		} else {
-			$matches = $this->get_matches_in_url( $this->webservice_address );
-			var_dump( $matches );
-
+			if ( 'yes' === $this->writing_log_status_for_wrong_url ) {
+				update_option( 'swdprd_has_log_for_wrong_url', 'no' );
+			}
+			return true;
 		}
 	}
 
 	/**
 	 * Tasks which is needed if Woocommerce is not active.
 	 */
-	private function set_tasks_when_woo_is_disable() {
+	private function set_tasks_when_url_wrong( Log_In_Footer $log_in_footer_object ) {
 
-		if ( false === $this->writing_log_status_for_woo_disabling || 'no' === $this->writing_log_status_for_woo_disabling ) {
-			$this->log_in_footer = new Log_In_Footer();
+		if ( false === $this->writing_log_status_for_wrong_url || 'no' === $this->writing_log_status_for_wrong_url ) {
+			$this->log_in_footer = $log_in_footer_object;
 			$this->write_log_during_execution(
 				$this->log_in_footer,
-				'Woocommerce plugin is not active. Due to this reason, this plugin can not run normally!!!',
+				'URL for updating stocks is wrong and you must set it in Siawood setting page again!!!',
 				SIAWOOD_PRODUCTS_LOGS . 'execution-log.txt',
 				'Warning for not executing plugin process'
 			);
-			update_option( 'swdprd_has_log_for_deactivating_woocommerce', 'yes' );
+			update_option( 'swdprd_has_log_for_wrong_url', 'yes' );
 		}
-		$this->admin_notices['woocommerce_deactivate_notice']->register_add_action();
+
+		$this->admin_notices['wrong_url_notice']->register_add_action();
 
 	}
 
@@ -296,6 +310,33 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		$args['file_name']   = $file_name;
 		$args['type']        = $type;
 		$log_in_footer_object->register_add_action_with_arguments( $args );
+
+	}
+
+	/**
+	 * Run updater to update stock amounts for all products in Woocommerce
+	 */
+	private function run_stock_updater() {
+		var_dump( 'ineeee' );
+		//var_dump('http://94.139.176.25:890/api/stock');
+	}
+
+	/**
+	 * Tasks which is needed if Woocommerce is not active.
+	 */
+	private function set_tasks_when_woo_is_disable( Log_In_Footer $log_in_footer_object ) {
+
+		if ( false === $this->writing_log_status_for_woo_disabling || 'no' === $this->writing_log_status_for_woo_disabling ) {
+			$this->log_in_footer = $log_in_footer_object;
+			$this->write_log_during_execution(
+				$this->log_in_footer,
+				'Woocommerce plugin is not active. Due to this reason, this plugin can not run normally!!!',
+				SIAWOOD_PRODUCTS_LOGS . 'execution-log.txt',
+				'Warning for not executing plugin process'
+			);
+			update_option( 'swdprd_has_log_for_deactivating_woocommerce', 'yes' );
+		}
+		$this->admin_notices['woocommerce_deactivate_notice']->register_add_action();
 
 	}
 

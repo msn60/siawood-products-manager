@@ -31,7 +31,9 @@ use Siawood_Products\Includes\Parts\Other\Remove_Post_Column;
 use Siawood_Products\Includes\Uninstall\{
 	Deactivator, Uninstall
 };
-use Siawood_Products\Includes\Admin\Notices\Woocommerce_Deactive_Notice;
+use Siawood_Products\Includes\Admin\Notices\{
+	Woocommerce_Deactive_Notice, Wrong_Url_Notice
+};
 
 use Siawood_Products\Includes\Functions\Init_Functions;
 use Siawood_Products\Includes\Parts\Shortcodes\Complete_Shortcode;
@@ -205,14 +207,15 @@ final class Siawood_Products_Plugin {
 		$this->core_object    = new Core(
 			$this->initial_values,
 			new Custom_Cron_Schedule( $this->initial_values->sample_custom_cron_schedule() ),
-			new Init_Functions(),
-			new I18n(),
+			/*new Init_Functions(),
+			new I18n(),*/
 			new Admin_Hook( SIAWOOD_PRODUCTS_PLUGIN, SIAWOOD_PRODUCTS_VERSION ),
 			[
 				new Complete_Shortcode( $this->initial_values->sample_complete_shortcode() ),
 			],
 			[
-				'woocommerce_deactivate_notice' => new Woocommerce_Deactive_Notice()
+				'woocommerce_deactivate_notice' => new Woocommerce_Deactive_Notice(),
+				'wrong_url_notice'              => new Wrong_Url_Notice(),
 			]
 		);
 		$this->core_object->init_core();
