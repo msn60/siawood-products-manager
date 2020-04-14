@@ -17,6 +17,7 @@ namespace Siawood_Products\Includes\Init;
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
 /**
  * Class Constant
  *
@@ -121,6 +122,14 @@ class Constant {
 		if ( ! defined( 'SIAWOOD_PRODUCTS_TPL_ADMIN' ) ) {
 			define( 'SIAWOOD_PRODUCTS_TPL_ADMIN', trailingslashit( SIAWOOD_PRODUCTS_TPL . 'admin' ) );
 		}
+		/**
+		 * SIAWOOD_PRODUCTS_TPL_ADMIN constant.
+		 * It is used to specify template urls inside templates/admin directory. If you want to
+		 * create a template for admin panel or administration purpose, you will use from it.
+		 */
+		if ( ! defined( 'SIAWOOD_PRODUCTS_TPL_FRONT' ) ) {
+			define( 'SIAWOOD_PRODUCTS_TPL_FRONT', trailingslashit( SIAWOOD_PRODUCTS_TPL . 'front' ) );
+		}
 
 		/**
 		 * SIAWOOD_PRODUCTS_TPL constant.
@@ -149,7 +158,7 @@ class Constant {
 		 * SIAWOOD_PRODUCTS_VERSION constant.
 		 * It defines version of plugin for management tasks in your plugin
 		 */
-		if ( ! defined( 'SIAWOOD_PRODUCTS_VERSION') ) {
+		if ( ! defined( 'SIAWOOD_PRODUCTS_VERSION' ) ) {
 			define( 'SIAWOOD_PRODUCTS_VERSION', '1.0.1' );
 		}
 
@@ -157,7 +166,7 @@ class Constant {
 		 * SIAWOOD_PRODUCTS_PLUGIN constant.
 		 * It defines name of plugin for management tasks in your plugin
 		 */
-		if ( ! defined( 'SIAWOOD_PRODUCTS_PLUGIN') ) {
+		if ( ! defined( 'SIAWOOD_PRODUCTS_PLUGIN' ) ) {
 			define( 'SIAWOOD_PRODUCTS_PLUGIN', 'siawood-products' );
 		}
 
@@ -168,7 +177,7 @@ class Constant {
 		 * You can use from this constant to apply your changes in updates or
 		 * activate plugin again
 		 */
-		if ( ! defined( 'SIAWOOD_PRODUCTS_DB_VERSION') ) {
+		if ( ! defined( 'SIAWOOD_PRODUCTS_DB_VERSION' ) ) {
 			define( 'SIAWOOD_PRODUCTS_DB_VERSION', 1 );
 		}
 
@@ -177,7 +186,7 @@ class Constant {
 		 *
 		 * It defines text domain name for plugin
 		 */
-		if ( ! defined( 'SIAWOOD_PRODUCTS_TEXTDOMAIN') ) {
+		if ( ! defined( 'SIAWOOD_PRODUCTS_TEXTDOMAIN' ) ) {
 			define( 'SIAWOOD_PRODUCTS_TEXTDOMAIN', 'siawood-products-textdomain' );
 		}
 		/*In future maybe I want to add constants for separated upload directory inside plugin directory*/

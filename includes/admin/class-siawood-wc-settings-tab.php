@@ -14,6 +14,7 @@
 namespace Siawood_Products\Includes\Admin;
 
 use Siawood_Products\Includes\Config\Siawood_Initial_Values;
+use Siawood_Products\Includes\Functions\Template_Builder;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -29,6 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @link       https://wpwebmaster.ir
  *
  * @see        https://www.battlestardigital.com/how-to-extend-woocommerce-with-the-wordpress-plugin-boilerplate/
+ * @see        https://github.com/msn60/wordpress-plugin-boilerplate-woocommerce
  * @see        https://www.speakinginbytes.com/2014/07/woocommerce-settings-tab/
  * @see        wp-content/plugins/woocommerce/includes/admin/wc-admin-functions.php & woocommerce_admin_fields() method
  * @see        wp-content/plugins/woocommerce/includes/admin/class-wc-admin-settings.php
@@ -43,7 +45,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Siawood_WC_Settings_Tab extends \WC_Settings_Page {
 	use Siawood_Initial_Values;
-
+	use Template_Builder;
 	public function __construct() {
 
 		$this->id    = 'siawood';
@@ -89,15 +91,16 @@ class Siawood_WC_Settings_Tab extends \WC_Settings_Page {
 	public function get_settings() {
 
 		global $current_section;
-		$prefix = 'swdprd_';
+		$prefix   = 'swdprd_';
 		$settings = [];
 
 		switch ( $current_section ) {
 			case 'log':
-				include SIAWOOD_PRODUCTS_PATH.'templates/admin/settings-page/log-section.php';
+				//include SIAWOOD_PRODUCTS_PATH . 'templates/admin/settings-page/log-section.php';
+				$this->load_template('settings-page.log-section',[]);
 				break;
 			default:
-				$settings = $this->get_siawood_general_settings_page_elements($prefix);
+				$settings = $this->get_siawood_general_settings_page_elements( $prefix );
 		}
 
 		return apply_filters( 'woocommerce_get_settings_' . $this->id, $settings, $current_section );
