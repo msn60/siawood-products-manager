@@ -45,7 +45,7 @@ trait Utility {
 	 * @param array  $params   Related parameters that must be extracted to use inside your template.
 	 * @param string $type     To detect admin or front directory to use related constant path.
 	 */
-	public static function load_template( $template, $params = array(), $type = 'admin' ) {
+	public static function load_template( $template, $params = [], $type = 'admin' ) {
 		$template       = str_replace( '.', '/', $template );
 		$base_path      = 'admin' === $type ? SIAWOOD_PRODUCTS_TPL_ADMIN : SIAWOOD_PRODUCTS_TPL_FRONT;
 		$view_file_path = $base_path . $template . '.php';

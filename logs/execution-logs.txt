@@ -37,3 +37,9 @@ URL for updating stocks is wrong and you must set it in Siawood setting page aga
 Log message of : Warning for not executing plugin process [on 2020-04-14  15:12:01]
 URL for updating stocks is wrong and you must set it in Siawood setting page again!!!
 
+Log message of : Sending email for disabling Woocommerce [on 2020-04-15  13:21:41]
+Sending email for disabling Woocommerce plugin was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-15  13:23:45]
+Sending email for disabling Woocommerce plugin was  Successful.
+

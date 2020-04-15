@@ -22,6 +22,7 @@ use Siawood_Products\Includes\Abstracts\{
 	Admin_Notice, Shortcode
 };
 
+use Siawood_Products\Includes\Config\Email_Initial_Values;
 use Siawood_Products\Includes\Hooks\Filters\Custom_Cron_Schedule;
 use Siawood_Products\Includes\Interfaces\{
 	Action_Hook_Interface, Filter_Hook_Interface
@@ -30,6 +31,8 @@ use Siawood_Products\Includes\Config\Initial_Value;
 use Siawood_Products\Includes\Functions\{
 	Check_Woocommerce, Init_Functions, Logger, Url_Checker, Utility, Check_Type, Web_Service, Log_In_Footer
 };
+
+use Siawood_Products\Includes\Parts\Email\Custom_Email;
 
 
 /**
@@ -52,6 +55,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	use Web_Service;
 	use Logger;
 	use Url_Checker;
+	use Email_Initial_Values;
 	/**
 	 * The unique identifier of this plugin.
 	 *
@@ -286,7 +290,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->write_log_during_execution(
 				$this->log_in_footer,
 				'URL for updating stocks is wrong and you must set it in Siawood setting page again!!!',
-				SIAWOOD_PRODUCTS_LOGS . 'execution-log.txt',
+				SIAWOOD_PRODUCTS_LOGS . 'execution-logs.txt',
 				'Warning for not executing plugin process'
 			);
 			update_option( 'swdprd_has_log_for_wrong_url', 'yes' );
@@ -331,7 +335,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->write_log_during_execution(
 				$this->log_in_footer,
 				'Woocommerce plugin is not active. Due to this reason, this plugin can not run normally!!!',
-				SIAWOOD_PRODUCTS_LOGS . 'execution-log.txt',
+				SIAWOOD_PRODUCTS_LOGS . 'execution-logs.txt',
 				'Warning for not executing plugin process'
 			);
 			update_option( 'swdprd_has_log_for_deactivating_woocommerce', 'yes' );
@@ -345,6 +349,9 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 */
 	public function for_testing() {
 
+
+		$my_test_email = new Custom_Email( 'woocommerce_disable', $this->get_email_subjects(), $this->get_email_templates());
+		$my_test_email->register_add_filter_with_arguments( new Log_In_Footer()  );
 
 		//var_dump($matches);
 		$test = [

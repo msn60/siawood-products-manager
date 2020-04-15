@@ -97,7 +97,7 @@ class Siawood_WC_Settings_Tab extends \WC_Settings_Page {
 		switch ( $current_section ) {
 			case 'log':
 				//include SIAWOOD_PRODUCTS_PATH . 'templates/admin/settings-page/log-section.php';
-				$this->load_template('settings-page.log-section',[]);
+				$this->load_template('settings-page.log-section');
 				break;
 			default:
 				$settings = $this->get_siawood_general_settings_page_elements( $prefix );
