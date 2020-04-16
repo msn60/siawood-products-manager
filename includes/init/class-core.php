@@ -208,13 +208,13 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		if ( $this->is_woocommerce_active( $this->writing_log_status_for_woo_disabling ) ) {
 			$this->register_add_action();
 			$this->register_add_filter();
-			$this->set_shortcodes();
 
 			if ( $this->check_before_start_update() ) {
 				$this->run_stock_updater();
 			}
 			add_filter( 'woocommerce_get_settings_pages', [ $this, 'add_woocommerce_setting_page' ] );
 			//$this->for_testing();
+			//$this->set_shortcodes();
 		} else {
 
 			$this->set_tasks_when_woo_is_disable( new Log_In_Footer() );
@@ -253,20 +253,6 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	}
 
 	/**
-	 * Method to set all of needed shortcodes for your plugin
-	 *
-	 * @access private
-	 * @since  1.0.1
-	 */
-	private function set_shortcodes() {
-		if ( ! is_null( $this->shortcodes ) ) {
-			foreach ( $this->shortcodes as $shortcode ) {
-				$shortcode->register_add_action();
-			}
-		}
-	}
-
-	/**
 	 * Method to check needed data for update before starting update process
 	 *
 	 * @return bool True if all of needed parts are exist for starting update process
@@ -275,6 +261,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		if ( ! $this->is_valid_url( $this->webservice_address ) ) {
 			$this->set_tasks_when_url_wrong( new Log_In_Footer() );
 			update_option( 'swdprd_has_log_for_wrong_url', 'yes' );
+
 			return false;
 		} else {
 			if ( 'yes' === $this->writing_log_status_for_wrong_url ) {
@@ -299,7 +286,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 				'Warning for not executing plugin process'
 			);
 			$notification_email = new Custom_Email( 'webservice_wrong_ip', $this->get_email_subjects(), $this->get_email_templates() );
-			$notification_email->register_add_filter_with_arguments( $this->log_in_footer);
+			$notification_email->register_add_filter_with_arguments( $this->log_in_footer );
 			//update_option( 'swdprd_has_log_for_wrong_url', 'yes' );
 		}
 
@@ -328,19 +315,66 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 * Run updater to update stock amounts for all products in Woocommerce
 	 */
 	private function run_stock_updater() {
-		//var_dump('http://94.139.176.25:890/api/stock');
-		$result = $this->get_webservice_data( 'http://94.139.176.26:890/api/stock' );
-		//$result = $this->get_webservice_data( $this->webservice_address );
+		//$result = $this->get_webservice_data( 'http://94.139.176.26:890/api/stock' ); //sample to test http request errors
+		$result = $this->get_webservice_data( $this->webservice_address );
 		if ( $result['connection_status'] ) {
 			if ( 'yes' === $this->writing_log_status_for_webservice_issues ) {
 				update_option( 'swdprd_has_log_for_webservice_issue', 'no' );
 			}
-			// TODO something
+			//$this->update_stocks_amount( new Log_In_Footer(), $result['product_items'], $result['count'] );
+			add_action('plugins_loaded', [$this, 'update_stocks_amount' ]);
 		} else {
 			$this->set_tasks_when_webservice_not_accessible( new Log_In_Footer(), $result['error_message'] );
 			update_option( 'swdprd_has_log_for_webservice_issue', 'yes' );
 
 		}
+	}
+
+	/**
+	 * Method to update stocks amount
+	 *
+	 * @param Log_In_Footer $log_in_footer_object
+	 * @param array         $product_items
+	 * @param int           $first_products_count
+	 */
+	public function update_stocks_amount(  ) {
+		$product_items = $product_items = [
+			[
+				'sku'   => '1471163101142',
+				'stock' => 0,
+			],
+			[
+				'sku'   => '1471163012022',
+				'stock' => 1,
+			],
+			[
+				'sku'   => '1471163012112',
+				'stock' => 2,
+			],
+			[
+				'sku'   => '1471163012122',
+				'stock' => 3,
+			],
+			[
+				'sku'   => '1471163012102',
+				'stock' => 4,
+			],
+		];
+		$count         = 0;
+		$temp_string   = '';
+		$new_array = [];
+		foreach ( $product_items as $item ) {
+			$id = \wc_get_product_id_by_sku($item['sku']);
+			$count ++;
+			$new_array[] = [
+				'id' => $id,
+				'stock' => get_post_meta( (int)$id , '_stock' ),
+				'stock_status' => get_post_meta((int)$id , '_stock_status'),
+
+			];
+			//$temp_string .= 'SKU: ' . $item['sku'] . ' and stock: ' . $item['stock'] . PHP_EOL;
+		}
+		var_dump($new_array);
 	}
 
 	/**
@@ -356,27 +390,9 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 				'Warning for problem in accessing to webservice'
 			);
 			$notification_email = new Custom_Email( 'webservice_is_not_accessible', $this->get_email_subjects(), $this->get_email_templates() );
-			$notification_email->register_add_filter_with_arguments( $this->log_in_footer);
+			$notification_email->register_add_filter_with_arguments( $this->log_in_footer );
 
 		}
-
-	}
-
-	/**
-	 * Method only for test
-	 */
-	public function for_testing() {
-
-
-		/*$my_test_email = new Custom_Email( 'woocommerce_disable', $this->get_email_subjects(), $this->get_email_templates() );
-		$my_test_email->register_add_filter_with_arguments( new Log_In_Footer() );*/
-
-		$test = [
-			'gholam' => 'bandari',
-			'abas'   => 'karegar',
-		];
-		update_post_meta( 10, '_gholam_test', 'system' );
-		//var_dump( get_post_meta( 10, '_gholam_test', true ) );
 
 	}
 
@@ -402,33 +418,49 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 
 	}
 
+	/**
+	 * Method only for test
+	 */
+	public function for_testing() {
+
+
+		/*$my_test_email = new Custom_Email( 'woocommerce_disable', $this->get_email_subjects(), $this->get_email_templates() );
+		$my_test_email->register_add_filter_with_arguments( new Log_In_Footer() );*/
+
+		$test = [
+			'gholam' => 'bandari',
+			'abas'   => 'karegar',
+		];
+		update_post_meta( 10, '_gholam_test', 'system' );
+		//var_dump( get_post_meta( 10, '_gholam_test', true ) );
+
+	}
+
 	public function add_woocommerce_setting_page() {
 		$settings[] = include_once SIAWOOD_PRODUCTS_PATH . 'includes/admin/class-siawood-wc-settings-tab.php';
 
 		return $settings;
 	}
 
-	public function ghanbar() {
-
-		$fp            = fopen( SIAWOOD_PRODUCTS_LOGS . 'list-of-products.txt', 'a' );//opens file in append mode
-		$count         = 0;
-		$gholam_string = '';
-
-		$results = $this->get_webservice_data( 'http://94.139.176.25:890/api/stock' );
-		foreach ( $results['product_items'] as $item ) {
+	public function get_product_list_from_api($product_items, $log_in_footer_object) {
+		$count       = 0;
+		$temp_string = '';
+		foreach ( $product_items as $item ) {
 			$count ++;
 			//echo 'SKU: ' . $item['sku'] . ' and stock: ' . $item['stock']. '<br>';
-			$gholam_string .= 'SKU: ' . $item['sku'] . ' and stock: ' . $item['stock'] . PHP_EOL;
+			$temp_string .= 'SKU: ' . $item['sku'] . ' and stock: ' . $item['stock'] . PHP_EOL;
 			/*$this->append_log_in_text_file(
 				'SKU: ' . $item['sku'] . ' and stock: ' . $item['stock'],
 				SIAWOOD_PRODUCTS_LOGS . 'list-of-products.txt', 'ghanbar' );*/
 		}
-		fwrite( $fp, $gholam_string );
 
-		fwrite( $fp, 'count: ' . $count . PHP_EOL );
-		fclose( $fp );
-		/*var_dump( $results['count'] );
-		var_dump( $results['product_items']['sku'] );*/
+		$this->log_in_footer = $log_in_footer_object;
+		$this->write_log_during_execution(
+			$this->log_in_footer,
+			$temp_string,
+			SIAWOOD_PRODUCTS_LOGS . 'list-of-products.txt',
+			'First part'
+		);
 	}
 
 	/**
@@ -450,6 +482,20 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 */
 	public function get_version() {
 		return $this->plugin_version;
+	}
+
+	/**
+	 * Method to set all of needed shortcodes for your plugin
+	 *
+	 * @access private
+	 * @since  1.0.1
+	 */
+	private function set_shortcodes() {
+		if ( ! is_null( $this->shortcodes ) ) {
+			foreach ( $this->shortcodes as $shortcode ) {
+				$shortcode->register_add_action();
+			}
+		}
 	}
 
 	/**
