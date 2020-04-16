@@ -45,6 +45,7 @@ class Deactivator {
 		$email_object = new Custom_Email( 'siawood_plugin_disable', $this->get_email_subjects(), $this->get_email_templates() );
 		$email_object->send_email();
 		// TODO: Add email log in email-logs.txt
+		// TODO: use Email_Initial_Values did not work in main plugin file
 		$this->register_deactivator_user();
 
 	}
