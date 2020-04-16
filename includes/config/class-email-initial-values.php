@@ -47,7 +47,7 @@ trait Email_Initial_Values {
 	public function get_email_templates( $arg = null ) {
 
 		$templates = [
-			'siawood_plugin_disable'          => [
+			'siawood_plugin_disable'       => [
 				'template' => 'email.siawood-plugin-disable',
 				'params'   => [],
 				'type'     => 'front',
@@ -57,8 +57,16 @@ trait Email_Initial_Values {
 				'params'   => [],
 				'type'     => 'front',
 			],
-			'webservice_wrong_ip'          => __( 'Warning for Problem with PALIZ webservice IP address', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
-			'webservice_is_not_accessible' => __( 'Warning for accessing PALIZ webservice', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+			'webservice_is_not_accessible' => [
+				'template' => 'email.webservice-issues',
+				'params'   => [],
+				'type'     => 'front',
+			],
+			'webservice_wrong_ip' => [
+				'template' => 'email.webservice-wrong-ip',
+				'params'   => [],
+				'type'     => 'front',
+			],
 			'successful_stock_update'      => __( 'Product is successfully updated in your site', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
 		];
 

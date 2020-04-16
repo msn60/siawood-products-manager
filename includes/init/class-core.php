@@ -129,6 +129,11 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	protected $webservice_address;
 
 	/**
+	 * @var string $writing_log_status_for_webservice_issues Options to keep status of state of writing log when has webservice issues.
+	 */
+	protected $writing_log_status_for_webservice_issues;
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -183,9 +188,10 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->admin_notices = $this->check_array_by_parent_type_assoc( $admin_notices, Admin_Notice::class )['valid'];;
 		}
 
-		$this->writing_log_status_for_woo_disabling = get_option( 'swdprd_has_log_for_deactivating_woocommerce' );
-		$this->writing_log_status_for_wrong_url     = get_option( 'swdprd_has_log_for_wrong_url' );
-		$this->webservice_address                   = get_option( 'swdprd_webservice_ip_address' );
+		$this->writing_log_status_for_woo_disabling     = get_option( 'swdprd_has_log_for_deactivating_woocommerce' );
+		$this->writing_log_status_for_wrong_url         = get_option( 'swdprd_has_log_for_wrong_url' );
+		$this->writing_log_status_for_webservice_issues = get_option( 'swdprd_has_log_for_webservice_issue' );
+		$this->webservice_address                       = get_option( 'swdprd_webservice_ip_address' );
 
 	}
 
@@ -232,9 +238,6 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		/*if ( ! is_null( $this->init_functions ) ) {
 			$this->init_functions->register_add_action();
 		}*/
-		/*if ( ! is_null( $this->plugin_i18n ) ) {
-			$this->plugin_i18n->register_add_action();
-		}*/
 
 		/*if ( is_admin() ) {
 
@@ -271,7 +274,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	private function check_before_start_update() {
 		if ( ! $this->is_valid_url( $this->webservice_address ) ) {
 			$this->set_tasks_when_url_wrong( new Log_In_Footer() );
-
+			update_option( 'swdprd_has_log_for_wrong_url', 'yes' );
 			return false;
 		} else {
 			if ( 'yes' === $this->writing_log_status_for_wrong_url ) {
@@ -295,7 +298,9 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 				SIAWOOD_PRODUCTS_LOGS . 'execution-logs.txt',
 				'Warning for not executing plugin process'
 			);
-			update_option( 'swdprd_has_log_for_wrong_url', 'yes' );
+			$notification_email = new Custom_Email( 'webservice_wrong_ip', $this->get_email_subjects(), $this->get_email_templates() );
+			$notification_email->register_add_filter_with_arguments( $this->log_in_footer);
+			//update_option( 'swdprd_has_log_for_wrong_url', 'yes' );
 		}
 
 		$this->admin_notices['wrong_url_notice']->register_add_action();
@@ -323,8 +328,56 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 * Run updater to update stock amounts for all products in Woocommerce
 	 */
 	private function run_stock_updater() {
-		//var_dump( 'ineeee' );
 		//var_dump('http://94.139.176.25:890/api/stock');
+		$result = $this->get_webservice_data( 'http://94.139.176.26:890/api/stock' );
+		//$result = $this->get_webservice_data( $this->webservice_address );
+		if ( $result['connection_status'] ) {
+			if ( 'yes' === $this->writing_log_status_for_webservice_issues ) {
+				update_option( 'swdprd_has_log_for_webservice_issue', 'no' );
+			}
+			// TODO something
+		} else {
+			$this->set_tasks_when_webservice_not_accessible( new Log_In_Footer(), $result['error_message'] );
+			update_option( 'swdprd_has_log_for_webservice_issue', 'yes' );
+
+		}
+	}
+
+	/**
+	 * Tasks when we have webservice issues.
+	 */
+	private function set_tasks_when_webservice_not_accessible( Log_In_Footer $log_in_footer_object, $log_message ) {
+		if ( false === $this->writing_log_status_for_webservice_issues || 'no' === $this->writing_log_status_for_webservice_issues ) {
+			$this->log_in_footer = $log_in_footer_object;
+			$this->write_log_during_execution(
+				$this->log_in_footer,
+				$log_message,
+				SIAWOOD_PRODUCTS_LOGS . 'execution-logs.txt',
+				'Warning for problem in accessing to webservice'
+			);
+			$notification_email = new Custom_Email( 'webservice_is_not_accessible', $this->get_email_subjects(), $this->get_email_templates() );
+			$notification_email->register_add_filter_with_arguments( $this->log_in_footer);
+
+		}
+
+	}
+
+	/**
+	 * Method only for test
+	 */
+	public function for_testing() {
+
+
+		/*$my_test_email = new Custom_Email( 'woocommerce_disable', $this->get_email_subjects(), $this->get_email_templates() );
+		$my_test_email->register_add_filter_with_arguments( new Log_In_Footer() );*/
+
+		$test = [
+			'gholam' => 'bandari',
+			'abas'   => 'karegar',
+		];
+		update_post_meta( 10, '_gholam_test', 'system' );
+		//var_dump( get_post_meta( 10, '_gholam_test', true ) );
+
 	}
 
 	/**
@@ -341,30 +394,11 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 				'Warning for not executing plugin process'
 			);
 
-			$my_test_email = new Custom_Email( 'woocommerce_disable', $this->get_email_subjects(), $this->get_email_templates() );
-			$my_test_email->register_add_filter_with_arguments( $this->log_in_footer );
+			$notification_email = new Custom_Email( 'woocommerce_disable', $this->get_email_subjects(), $this->get_email_templates() );
+			$notification_email->register_add_filter_with_arguments( $this->log_in_footer );
 			update_option( 'swdprd_has_log_for_deactivating_woocommerce', 'yes' );
 		}
 		$this->admin_notices['woocommerce_deactivate_notice']->register_add_action();
-
-	}
-
-	/**
-	 * Method only for test
-	 */
-	public function for_testing() {
-
-
-		$my_test_email = new Custom_Email( 'woocommerce_disable', $this->get_email_subjects(), $this->get_email_templates() );
-		$my_test_email->register_add_filter_with_arguments( new Log_In_Footer() );
-
-		//var_dump($matches);
-		$test = [
-			'gholam' => 'bandari',
-			'abas'   => 'karegar',
-		];
-		update_post_meta( 10, '_gholam_test', 'system' );
-		//var_dump( get_post_meta( 10, '_gholam_test', true ) );
 
 	}
 

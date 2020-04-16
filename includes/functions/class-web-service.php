@@ -37,8 +37,6 @@ trait Web_Service {
 	 */
 	public function get_webservice_data( $url ) {
 
-		//TODO: check url before start
-		//TODO: check status code before continue
 		$request = wp_remote_get(
 			$url,
 			[
@@ -46,11 +44,13 @@ trait Web_Service {
 			]
 		);
 
-		//TODO: check error and if has error return it and log
-		/*if( is_wp_error( $request ) ) {
-			var_dump($request); // Bail early
-			//exit();
-		}*/
+		if ( is_wp_error( $request ) ) {
+			return [
+				'connection_status' => false,
+				'error_message'     => $request->get_error_message(),
+			];
+
+		}
 
 		$body = wp_remote_retrieve_body( $request );
 
@@ -66,8 +66,9 @@ trait Web_Service {
 		}
 
 		return [
-			'count'         => $count,
-			'product_items' => $product_items,
+			'connection_status' => true,
+			'count'             => $count,
+			'product_items'     => $product_items,
 		];
 	}
 

@@ -49,3 +49,30 @@ Woocommerce plugin is not active. Due to this reason, this plugin can not run no
 Log message of : Warning for not executing plugin process [on 2020-04-16  10:59:04]
 Woocommerce plugin is not active. Due to this reason, this plugin can not run normally!!!
 
+Log message of : Warning for problem in accessing to webservice [on 2020-04-16  16:27:56]
+cURL error 7: Failed to connect to 94.139.176.26 port 890: Connection refused
+
+Log message of : Warning for problem in accessing to webservice [on 2020-04-16  16:44:41]
+cURL error 7: Failed to connect to 94.139.176.26 port 890: Connection refused
+
+Log message of : Warning for problem in accessing to webservice [on 2020-04-16  16:46:29]
+cURL error 7: Failed to connect to 94.139.176.26 port 890: Connection refused
+
+Log message of : Warning for problem in accessing to webservice [on 2020-04-16  16:48:03]
+cURL error 7: Failed to connect to 94.139.176.26 port 890: Connection refused
+
+Log message of : Warning for problem in accessing to webservice [on 2020-04-16  16:49:47]
+cURL error 7: Failed to connect to 94.139.176.26 port 890: Connection refused
+
+Log message of : Warning for not executing plugin process [on 2020-04-16  17:39:06]
+URL for updating stocks is wrong and you must set it in Siawood setting page again!!!
+
+Log message of : Warning for not executing plugin process [on 2020-04-16  17:45:01]
+URL for updating stocks is wrong and you must set it in Siawood setting page again!!!
+
+Log message of : Warning for not executing plugin process [on 2020-04-16  17:50:20]
+URL for updating stocks is wrong and you must set it in Siawood setting page again!!!
+
+Log message of : Warning for not executing plugin process [on 2020-04-16  17:52:20]
+URL for updating stocks is wrong and you must set it in Siawood setting page again!!!
+
