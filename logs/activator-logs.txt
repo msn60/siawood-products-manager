@@ -18,3 +18,21 @@ The user with login of: "" and display name of: "" activated this plugin
 
 Log message of : Activator User [on 2020-04-09  16:39:50]
 The user with login of: "mehdi" and display name of: "mehdi" activated this plugin
+Log message of : Activator User [on 2020-04-16  09:54:23]
+The user with login of: "mehdi" and display name of: "mehdi" activated this plugin
+
+Log message of : Activator User [on 2020-04-16  10:25:09]
+The user with login of: "mehdi" and display name of: "mehdi" activated this plugin
+
+Log message of : Activator User [on 2020-04-16  10:30:02]
+The user with login of: "mehdi" and display name of: "mehdi" activated this plugin
+
+Log message of : Activator User [on 2020-04-16  10:53:13]
+The user with login of: "mehdi" and display name of: "mehdi" activated this plugin
+
+Log message of : Activator User [on 2020-04-16  10:56:57]
+The user with login of: "mehdi" and display name of: "mehdi" activated this plugin
+
+Log message of : Activator User [on 2020-04-16  10:58:40]
+The user with login of: "mehdi" and display name of: "mehdi" activated this plugin
+

@@ -123,7 +123,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="headline">فعال نبودن پلاگین ووکامرس</td>
+                                    <td class="headline">فعال نبودن پلاگین سیاوود</td>
                                 </tr>
                                 <tr>
                                     <td>
@@ -132,9 +132,9 @@
                                             <table style="margin: 0 auto;" cellpadding="0" cellspacing="0" width="60%">
                                                 <tr>
                                                     <td style="color:#187272; text-align: justify" class="msn-direction-rtl">
-                                                        <br>پلاگین ووکامرس در سایت شما فعال نمی باشد<br>
+                                                        <br>پلاگین سیاوود در سایت شما فعال نمی باشد<br>
                                                         <br>به همین دلیل پلاگین مدیریت موجودی انبار سایت، به درستی کار نمی کند<br>
-                                                        <br>لطفا برای درست کار کردن آن، حتما پلاگین ووکامرس را فعال نمایید<br>
+                                                        <br>لطفا برای درست کار کردن آن، حتما پلاگین سیاوود را فعال نمایید<br>
                                                         <br>
                                                     </td>
                                                 </tr>
@@ -153,8 +153,7 @@
                                                 <center>
                                             <![endif]-->
                                             <a href="https://siawood.ir/wp-admin/plugins.php"
-                                               style="background-color:#178f8f;border-radius:4px;color:#ffffff;display:inline-block;font-family:Vazir, Helvetica, Arial, sans-serif;font-size:16px;font-weight:bold;line-height:50px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;">فعال
-                                                کردن پلاگین</a>
+                                               style="background-color:#178f8f;border-radius:4px;color:#ffffff;display:inline-block;font-family:Vazir, Helvetica, Arial, sans-serif;font-size:16px;font-weight:bold;line-height:50px;text-align:center;text-decoration:none;width:200px;-webkit-text-size-adjust:none;">فعال کردن پلاگین</a>
                                             <!--[if mso]>
                                             </center>
                                             </v:roundrect>

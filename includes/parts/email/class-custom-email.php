@@ -79,6 +79,7 @@ class Custom_Email {
 
 	public function register_add_filter_with_arguments( Log_In_Footer $log_in_footer_object ) {
 		$result = add_filter( $this->hook_for_add_action, [ $this, 'send_email' ] );
+		//$result = add_filter( 'init', [ $this, 'send_email' ] );
 		// TODO: check how to get fail with wp_email
 		if ( false === $result ) {
 			$this->log_sending_email_result( 'fail', $log_in_footer_object );

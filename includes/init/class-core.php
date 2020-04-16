@@ -271,11 +271,13 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	private function check_before_start_update() {
 		if ( ! $this->is_valid_url( $this->webservice_address ) ) {
 			$this->set_tasks_when_url_wrong( new Log_In_Footer() );
+
 			return false;
 		} else {
 			if ( 'yes' === $this->writing_log_status_for_wrong_url ) {
 				update_option( 'swdprd_has_log_for_wrong_url', 'no' );
 			}
+
 			return true;
 		}
 	}
@@ -321,7 +323,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 * Run updater to update stock amounts for all products in Woocommerce
 	 */
 	private function run_stock_updater() {
-		var_dump( 'ineeee' );
+		//var_dump( 'ineeee' );
 		//var_dump('http://94.139.176.25:890/api/stock');
 	}
 
@@ -338,6 +340,9 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 				SIAWOOD_PRODUCTS_LOGS . 'execution-logs.txt',
 				'Warning for not executing plugin process'
 			);
+
+			$my_test_email = new Custom_Email( 'woocommerce_disable', $this->get_email_subjects(), $this->get_email_templates() );
+			$my_test_email->register_add_filter_with_arguments( $this->log_in_footer );
 			update_option( 'swdprd_has_log_for_deactivating_woocommerce', 'yes' );
 		}
 		$this->admin_notices['woocommerce_deactivate_notice']->register_add_action();
@@ -350,8 +355,8 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	public function for_testing() {
 
 
-		$my_test_email = new Custom_Email( 'woocommerce_disable', $this->get_email_subjects(), $this->get_email_templates());
-		$my_test_email->register_add_filter_with_arguments( new Log_In_Footer()  );
+		$my_test_email = new Custom_Email( 'woocommerce_disable', $this->get_email_subjects(), $this->get_email_templates() );
+		$my_test_email->register_add_filter_with_arguments( new Log_In_Footer() );
 
 		//var_dump($matches);
 		$test = [

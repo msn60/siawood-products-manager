@@ -13,8 +13,11 @@
 
 namespace Siawood_Products\Includes\Uninstall;
 
-use Siawood_Products\Includes\Functions\Current_User;
-use Siawood_Products\Includes\Functions\Logger;
+use Siawood_Products\Includes\Config\Email_Initial_Values;
+use Siawood_Products\Includes\Functions\{
+	Current_User, Logger, Log_In_Footer
+};
+use Siawood_Products\Includes\Parts\Email\Custom_Email;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -30,6 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Deactivator {
 	use Current_User;
 	use Logger;
+	use Email_Initial_Values;
 
 	/**
 	 * Run related tasks when plugin is deactivated
@@ -37,8 +41,10 @@ class Deactivator {
 	 * @access public
 	 * @since  1.0.1
 	 */
-	public function deactivate() {
-
+	public function deactivate( ) {
+		$email_object = new Custom_Email( 'siawood_plugin_disable', $this->get_email_subjects(), $this->get_email_templates() );
+		$email_object->send_email();
+		// TODO: Add email log in email-logs.txt
 		$this->register_deactivator_user();
 
 	}
@@ -55,6 +61,10 @@ class Deactivator {
 			SIAWOOD_PRODUCTS_LOGS . 'deactivator-logs.txt',
 			'De-Activator User' );
 
+	}
+
+	public function send_notification_email( Custom_Email $email_object, Log_In_Footer $log_in_footer_object ) {
+		$email_object->register_add_filter_with_arguments( $log_in_footer_object );
 	}
 
 }

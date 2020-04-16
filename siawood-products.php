@@ -37,6 +37,7 @@ use Siawood_Products\Includes\Admin\Notices\{
 
 use Siawood_Products\Includes\Functions\Init_Functions;
 use Siawood_Products\Includes\Parts\Shortcodes\Complete_Shortcode;
+use Siawood_Products\Includes\Parts\Email\Custom_Email;
 use Siawood_Products\Includes\Hooks\Filters\Custom_Cron_Schedule;
 
 /**

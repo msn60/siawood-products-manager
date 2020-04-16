@@ -25,3 +25,21 @@ The user with login of: "" and display name of: "" de-activated this plugin
 Log message of : De-Activator User [on 2020-04-09  16:39:33]
 The user with login of: "mehdi" and display name of: "mehdi" de-activated this plugin
 
+Log message of : De-Activator User [on 2020-04-16  09:53:49]
+The user with login of: "mehdi" and display name of: "mehdi" de-activated this plugin
+
+Log message of : De-Activator User [on 2020-04-16  10:18:05]
+The user with login of: "mehdi" and display name of: "mehdi" de-activated this plugin
+
+Log message of : De-Activator User [on 2020-04-16  10:25:40]
+The user with login of: "mehdi" and display name of: "mehdi" de-activated this plugin
+
+Log message of : De-Activator User [on 2020-04-16  10:30:33]
+The user with login of: "mehdi" and display name of: "mehdi" de-activated this plugin
+
+Log message of : De-Activator User [on 2020-04-16  10:53:38]
+The user with login of: "mehdi" and display name of: "mehdi" de-activated this plugin
+
+Log message of : De-Activator User [on 2020-04-16  10:57:20]
+The user with login of: "mehdi" and display name of: "mehdi" de-activated this plugin
+
