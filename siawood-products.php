@@ -37,6 +37,7 @@ use Siawood_Products\Includes\Admin\Notices\{
 
 use Siawood_Products\Includes\Functions\Init_Functions;
 use Siawood_Products\Includes\Parts\Shortcodes\Complete_Shortcode;
+use Siawood_Products\Includes\Parts\Products\Products_Updater;
 use Siawood_Products\Includes\Parts\Email\Custom_Email;
 use Siawood_Products\Includes\Hooks\Filters\Custom_Cron_Schedule;
 
@@ -211,6 +212,7 @@ final class Siawood_Products_Plugin {
 			/*new Init_Functions(),
 			new I18n(),*/
 			new Admin_Hook( SIAWOOD_PRODUCTS_PLUGIN, SIAWOOD_PRODUCTS_VERSION ),
+			new Products_Updater(),
 			[
 				new Complete_Shortcode( $this->initial_values->sample_complete_shortcode() ),
 			],
@@ -218,6 +220,7 @@ final class Siawood_Products_Plugin {
 				'woocommerce_deactivate_notice' => new Woocommerce_Deactive_Notice(),
 				'wrong_url_notice'              => new Wrong_Url_Notice(),
 			]
+
 		);
 		$this->core_object->init_core();
 	}

@@ -62,12 +62,16 @@ trait Email_Initial_Values {
 				'params'   => [],
 				'type'     => 'front',
 			],
-			'webservice_wrong_ip' => [
+			'webservice_wrong_ip'          => [
 				'template' => 'email.webservice-wrong-ip',
 				'params'   => [],
 				'type'     => 'front',
 			],
-			'successful_stock_update'      => __( 'Product is successfully updated in your site', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+			'successful_stock_update'          => [
+				'template' => 'email.product-update',
+				'params'   => [],
+				'type'     => 'front',
+			],
 		];
 
 		return $templates;

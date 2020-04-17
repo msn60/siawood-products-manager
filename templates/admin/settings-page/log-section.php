@@ -13,7 +13,7 @@ $GLOBALS['hide_save_button'] = true;
 $msn_temp_report             = '';
 $file                        = file( SIAWOOD_PRODUCTS_PATH . 'logs/execution-logs.txt' );
 
-for ( $i = max( 0, count( $file ) - 15 ); $i < count( $file ); $i ++ ) {
+for ( $i = max( 0, count( $file ) - 30 ); $i < count( $file ); $i ++ ) {
 	$msn_temp_report .= $file[ $i ] . '<br>';
 }
 

@@ -76,3 +76,36 @@ URL for updating stocks is wrong and you must set it in Siawood setting page aga
 Log message of : Warning for not executing plugin process [on 2020-04-16  17:52:20]
 URL for updating stocks is wrong and you must set it in Siawood setting page again!!!
 
+Log message of : Warning for problem in accessing to webservice [on 2020-04-17  14:21:54]
+cURL error 7: Failed to connect to 94.139.176.25 port 890: Host unreachable
+
+Log message of : Update process results [on 2020-04-17  16:14:46]
+Update process is succesfully done
+Number of success updated product: 5
+Number of failed updated product: 1
+
+
+Log message of : Update process results [on 2020-04-17  16:16:51]
+Update process is succesfully done
+Number of success updated product: 5
+Number of failed updated product: 1
+
+
+Log message of : Update process results [on 2020-04-17  16:21:47]
+Update process is succesfully done
+Number of success updated product: 5
+Number of failed updated product: 1
+
+
+Log message of : Update process results [on 2020-04-17  16:25:02]
+Update process is succesfully done
+Number of success updated product: 5
+Number of failed updated product: 1
+
+
+Log message of : Update process results [on 2020-04-17  16:31:49]
+Update process is succesfully done
+Number of success updated product: 5
+Number of failed updated product: 1
+
+

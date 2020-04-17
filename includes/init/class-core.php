@@ -33,6 +33,7 @@ use Siawood_Products\Includes\Functions\{
 };
 
 use Siawood_Products\Includes\Parts\Email\Custom_Email;
+use Siawood_Products\Includes\Parts\Products\Products_Updater;
 
 
 /**
@@ -78,6 +79,11 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 * @var Admin_Hook $admin_hooks Object  to keep all of hooks in your plugin
 	 */
 	protected $admin_hooks;
+
+	/**
+	 * @var Products_Updater $products_updater Object  to keep product updater class
+	 */
+	protected $products_updater;
 
 	/**
 	 * @var Shortcode[] $shortcodes
@@ -148,6 +154,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		/*Init_Functions $init_functions = null,
 		I18n $plugin_i18n = null,*/
 		Admin_Hook $admin_hooks = null,
+		Products_Updater $products_updater,
 		array $shortcodes = null,
 		array $admin_notices = null
 
@@ -175,6 +182,10 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 
 		if ( ! is_null( $admin_hooks ) ) {
 			$this->admin_hooks = $admin_hooks;
+		}
+
+		if ( ! is_null( $admin_hooks ) ) {
+			$this->products_updater = $products_updater;
 		}
 
 		if ( ! is_null( $custom_cron_schedule ) ) {
@@ -220,7 +231,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->set_tasks_when_woo_is_disable( new Log_In_Footer() );
 
 		}
-
+		// TODO: Archive log file if larger than 2Ming
 
 	}
 
@@ -322,59 +333,42 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 				update_option( 'swdprd_has_log_for_webservice_issue', 'no' );
 			}
 			//$this->update_stocks_amount( new Log_In_Footer(), $result['product_items'], $result['count'] );
-			add_action('plugins_loaded', [$this, 'update_stocks_amount' ]);
+			$result['product_items'] = null;
+			$result['product_items'] = [
+				[
+					'sku'   => '1471163101142',
+					'stock' =>  '100',
+				],
+				[
+					'sku'   => '1471163012022',
+					'stock' =>  '0',
+				],
+				[
+					'sku'   => '1471163012112',
+					'stock' =>  '200',
+				],
+				[
+					'sku'   => '1471163012122',
+					'stock' =>  '300',
+				],
+				[
+					'sku'   => '1471163012102',
+					'stock' =>  '400',
+				],
+				[
+					'sku'   => '14711639999',
+					'stock' =>  '4',
+				],
+			];
+
+			$this->products_updater->set_product_items( $result['product_items'] );
+			$this->products_updater->set_first_product_counts( $result['count'] );
+			$this->products_updater->register_add_action();
 		} else {
 			$this->set_tasks_when_webservice_not_accessible( new Log_In_Footer(), $result['error_message'] );
 			update_option( 'swdprd_has_log_for_webservice_issue', 'yes' );
 
 		}
-	}
-
-	/**
-	 * Method to update stocks amount
-	 *
-	 * @param Log_In_Footer $log_in_footer_object
-	 * @param array         $product_items
-	 * @param int           $first_products_count
-	 */
-	public function update_stocks_amount(  ) {
-		$product_items = $product_items = [
-			[
-				'sku'   => '1471163101142',
-				'stock' => 0,
-			],
-			[
-				'sku'   => '1471163012022',
-				'stock' => 1,
-			],
-			[
-				'sku'   => '1471163012112',
-				'stock' => 2,
-			],
-			[
-				'sku'   => '1471163012122',
-				'stock' => 3,
-			],
-			[
-				'sku'   => '1471163012102',
-				'stock' => 4,
-			],
-		];
-		$count         = 0;
-		$temp_string   = '';
-		$new_array = [];
-		foreach ( $product_items as $item ) {
-			$id = \wc_get_product_id_by_sku($item['sku']);
-			$count ++;
-			$new_array[] = [
-				'id' => $id,
-				'stock' => get_post_meta( (int)$id , '_stock' ),
-				'stock_status' => get_post_meta((int)$id , '_stock_status'),
-
-			];
-			//$temp_string .= 'SKU: ' . $item['sku'] . ' and stock: ' . $item['stock'] . PHP_EOL;
-		}
-		var_dump($new_array);
 	}
 
 	/**
@@ -442,7 +436,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		return $settings;
 	}
 
-	public function get_product_list_from_api($product_items, $log_in_footer_object) {
+	public function get_product_list_from_api( $product_items, $log_in_footer_object ) {
 		$count       = 0;
 		$temp_string = '';
 		foreach ( $product_items as $item ) {
@@ -482,6 +476,53 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 */
 	public function get_version() {
 		return $this->plugin_version;
+	}
+
+	/**
+	 * Method to update stocks amount
+	 *
+	 * @param Log_In_Footer $log_in_footer_object
+	 * @param array         $product_items
+	 * @param int           $first_products_count
+	 */
+	private function set_stocks_update() {
+		$product_items = $product_items = [
+			[
+				'sku'   => '1471163101142',
+				'stock' => 0,
+			],
+			[
+				'sku'   => '1471163012022',
+				'stock' => 1,
+			],
+			[
+				'sku'   => '1471163012112',
+				'stock' => 2,
+			],
+			[
+				'sku'   => '1471163012122',
+				'stock' => 3,
+			],
+			[
+				'sku'   => '1471163012102',
+				'stock' => 4,
+			],
+		];
+		$count         = 0;
+		$temp_string   = '';
+		$new_array     = [];
+		foreach ( $product_items as $item ) {
+			$id = \wc_get_product_id_by_sku( $item['sku'] );
+			$count ++;
+			$new_array[] = [
+				'id'           => $id,
+				'stock'        => get_post_meta( (int) $id, '_stock' ),
+				'stock_status' => get_post_meta( (int) $id, '_stock_status' ),
+
+			];
+			//$temp_string .= 'SKU: ' . $item['sku'] . ' and stock: ' . $item['stock'] . PHP_EOL;
+		}
+		var_dump( $new_array );
 	}
 
 	/**

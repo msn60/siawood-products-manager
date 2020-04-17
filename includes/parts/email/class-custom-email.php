@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Custom_Email {
 	use Template_Builder;
-
+	// TODO : Custom Email must inject in primary class
 	/**
 	 * @var string $to Mail address for sent to it
 	 */
@@ -58,6 +58,13 @@ class Custom_Email {
 	 */
 	protected $hook_for_add_action;
 
+	/**
+	 * Custom_Email constructor.
+	 *
+	 * @param string $type     Type of email which will send
+	 * @param array $subject  Subject of email
+	 * @param array $template Template file of email which will use when email is sent
+	 */
 	public function __construct( $type, $subject, $template ) {
 
 		$siawood_admin_email = get_option( 'swdprd_admin_email_address' );
@@ -77,6 +84,11 @@ class Custom_Email {
 		}
 	}
 
+	/**
+	 * Filter to send email and log each part of sending email in related log file
+	 *
+	 * @param Log_In_Footer $log_in_footer_object Object for log when wp_footer or admin_footer hook fires
+	 */
 	public function register_add_filter_with_arguments( Log_In_Footer $log_in_footer_object ) {
 		$result = add_filter( $this->hook_for_add_action, [ $this, 'send_email' ] );
 		//$result = add_filter( 'init', [ $this, 'send_email' ] );
@@ -88,6 +100,11 @@ class Custom_Email {
 		}
 	}
 
+	/**
+	 * Method to log sending email process and its results.
+	 * @param  string       $type
+	 * @param Log_In_Footer $log_in_footer_object Object for log when wp_footer or admin_footer hook fires
+	 */
 	public function log_sending_email_result( $type, Log_In_Footer $log_in_footer_object ) {
 		$args = [];
 		if ( 'fail' === $type ) {
@@ -101,6 +118,11 @@ class Custom_Email {
 
 	}
 
+	/**
+	 * Method to send email with wp_mail method and related template
+	 *
+	 * @return bool True if sending email will be successful
+	 */
 	public function send_email() {
 		ob_start();
 		$this->load_template( $this->template['template'], $this->template['params'], $this->template['type'] );

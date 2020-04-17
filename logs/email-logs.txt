@@ -55,3 +55,18 @@ Sending email for disabling Woocommerce plugin was  Successful.
 Log message of : Sending email for disabling Woocommerce [on 2020-04-16  17:52:30]
 Sending email for disabling Woocommerce plugin was  Successful.
 
+Log message of : Sending email for disabling Woocommerce [on 2020-04-17  14:21:57]
+Sending email for disabling Woocommerce plugin was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-17  16:17:02]
+Sending email for disabling Woocommerce plugin was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-17  16:21:58]
+Sending email for disabling Woocommerce plugin was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-17  16:25:13]
+Sending email for disabling Woocommerce plugin was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-17  16:31:59]
+Sending email for disabling Woocommerce plugin was  Successful.
+

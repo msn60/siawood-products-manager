@@ -60,7 +60,7 @@ trait Web_Service {
 		foreach ( $result as $item ) {
 			$product_items[] = [
 				'sku'   => $item->_Barcode,
-				'stock' => $item->_Stock,
+				'stock' => (string) $item->_Stock,
 			];
 			$count ++;
 		}
@@ -71,31 +71,6 @@ trait Web_Service {
 			'product_items'     => $product_items,
 		];
 
-	}
-
-	public function test() {
-		$product_items = [
-			[
-				'sku'   => '1471163101142',
-				'stock' => 0,
-			],
-			[
-				'sku'   => '1471163012022',
-				'stock' => 1,
-			],
-			[
-				'sku'   => '1471163012112',
-				'stock' => 2,
-			],
-			[
-				'sku'   => '1471163012122',
-				'stock' => 3,
-			],
-			[
-				'sku'   => '1471163012102',
-				'stock' => 4,
-			],
-		];
 	}
 
 }
