@@ -217,3 +217,45 @@ Number of success updated product: 1240
 Number of failed updated product: 2529
 
 
+Log message of : Update process results [on 2020-04-19  19:28:17]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+
+Log message of : Update process results [on 2020-04-19  19:43:51]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+
+Log message of : Update process results [on 2020-04-19  19:45:04]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+
+Log message of : Update process results [on 2020-04-19  19:50:20]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+
+Log message of : Update process results [on 2020-04-19  20:06:22]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+
+Log message of : Update process results [on 2020-04-19  20:07:51]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+
+Log message of : Update process results [on 2020-04-19  20:19:27]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+

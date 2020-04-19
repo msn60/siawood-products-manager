@@ -139,6 +139,8 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 */
 	protected $writing_log_status_for_webservice_issues;
 
+	protected $last_update;
+
 	/**
 	 * Define the core functionality of the plugin.
 	 *
@@ -203,6 +205,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		$this->writing_log_status_for_wrong_url         = get_option( 'swdprd_has_log_for_wrong_url' );
 		$this->writing_log_status_for_webservice_issues = get_option( 'swdprd_has_log_for_webservice_issue' );
 		$this->webservice_address                       = get_option( 'swdprd_webservice_ip_address' );
+		$this->last_update                              = get_option( 'swdprd_last_update' );
 
 	}
 
@@ -219,11 +222,10 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		if ( $this->is_woocommerce_active( $this->writing_log_status_for_woo_disabling ) ) {
 			$this->register_add_action();
 			$this->register_add_filter();
-
 			if ( $this->check_before_start_update() ) {
 				$this->run_stock_updater();
 			}
-			add_filter( 'woocommerce_get_settings_pages', [ $this, 'add_woocommerce_setting_page' ] );
+
 			//$this->for_testing();
 			//$this->set_shortcodes();
 		} else {
@@ -260,7 +262,8 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 *
 	 */
 	public function register_add_filter() {
-		$this->custom_cron_schedule->register_add_filter();
+		add_filter( 'woocommerce_get_settings_pages', [ $this, 'add_woocommerce_setting_page' ] );
+		//$this->custom_cron_schedule->register_add_filter();
 	}
 
 	/**
@@ -279,7 +282,22 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 				update_option( 'swdprd_has_log_for_wrong_url', 'no' );
 			}
 
-			return true;
+			date_default_timezone_set( 'Asia/Tehran' );
+			$now_date_time = [
+				'date' => date( 'Y-m-d' ),
+				'time' => date( 'H:i:s' ),
+			];
+			/*var_dump($now_date_time['date']);
+			var_dump($this->last_update['date']);
+			var_dump(strtotime( $now_date_time['date'] ));
+			var_dump(strtotime( $this->last_update['date'] ));*/
+			if ( strtotime( $now_date_time['date'] ) > strtotime( $this->last_update['date'] ) ) {
+				update_option('swdprd_last_update', $now_date_time);
+				return true;
+			}
+
+			//update_option('swdprd_last_update', $last_update);
+			return false;
 		}
 	}
 
