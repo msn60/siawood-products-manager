@@ -140,6 +140,8 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	protected $writing_log_status_for_webservice_issues;
 
 	protected $last_update;
+	protected $now_date_time;
+
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -205,7 +207,14 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		$this->writing_log_status_for_wrong_url         = get_option( 'swdprd_has_log_for_wrong_url' );
 		$this->writing_log_status_for_webservice_issues = get_option( 'swdprd_has_log_for_webservice_issue' );
 		$this->webservice_address                       = get_option( 'swdprd_webservice_ip_address' );
-		$this->last_update                              = get_option( 'swdprd_last_update' );
+		date_default_timezone_set( 'Asia/Tehran' );
+		$this->last_update = get_option( 'swdprd_last_update' );
+		$this->now_date_time = [
+			'date' => date( 'Y-m-d' ),
+			'time' => date( 'H:i:s' ),
+		];
+		/*var_dump($this->last_update);
+		var_dump($this->now_date_time);*/
 
 	}
 
@@ -248,13 +257,6 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		if ( ! is_null( $this->admin_hooks ) ) {
 			$this->admin_hooks->register_add_action();
 		}
-		/*if ( ! is_null( $this->init_functions ) ) {
-			$this->init_functions->register_add_action();
-		}*/
-
-		/*if ( is_admin() ) {
-
-		}*/
 	}
 
 	/**
@@ -275,28 +277,19 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		if ( ! $this->is_valid_url( $this->webservice_address ) ) {
 			$this->set_tasks_when_url_wrong( new Log_In_Footer() );
 			update_option( 'swdprd_has_log_for_wrong_url', 'yes' );
-
 			return false;
 		} else {
 			if ( 'yes' === $this->writing_log_status_for_wrong_url ) {
 				update_option( 'swdprd_has_log_for_wrong_url', 'no' );
 			}
-
-			date_default_timezone_set( 'Asia/Tehran' );
-			$now_date_time = [
-				'date' => date( 'Y-m-d' ),
-				'time' => date( 'H:i:s' ),
-			];
 			/*var_dump($now_date_time['date']);
-			var_dump($this->last_update['date']);
-			var_dump(strtotime( $now_date_time['date'] ));
+			var_dump($this->last_update['date']);*/
+			/*var_dump(strtotime( $this->now_date_time['date'] ));
 			var_dump(strtotime( $this->last_update['date'] ));*/
-			if ( strtotime( $now_date_time['date'] ) > strtotime( $this->last_update['date'] ) ) {
-				update_option('swdprd_last_update', $now_date_time);
+			if ( strtotime( $this->now_date_time['date'] ) > strtotime( $this->last_update['date'] ) ) {
 				return true;
 			}
 
-			//update_option('swdprd_last_update', $last_update);
 			return false;
 		}
 	}
@@ -382,6 +375,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->products_updater->set_product_items( $result['product_items'] );
 			$this->products_updater->set_first_product_counts( $result['count'] );
 			$this->products_updater->register_add_action();
+			update_option( 'swdprd_last_update', $this->now_date_time );
 		} else {
 			$this->set_tasks_when_webservice_not_accessible( new Log_In_Footer(), $result['error_message'] );
 			update_option( 'swdprd_has_log_for_webservice_issue', 'yes' );
@@ -434,18 +428,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 * Method only for test
 	 */
 	public function for_testing() {
-
-
-		/*$my_test_email = new Custom_Email( 'woocommerce_disable', $this->get_email_subjects(), $this->get_email_templates() );
-		$my_test_email->register_add_filter_with_arguments( new Log_In_Footer() );*/
-
-		$test = [
-			'gholam' => 'bandari',
-			'abas'   => 'karegar',
-		];
-		update_post_meta( 10, '_gholam_test', 'system' );
-		//var_dump( get_post_meta( 10, '_gholam_test', true ) );
-
+		//TODO for test
 	}
 
 	public function add_woocommerce_setting_page() {

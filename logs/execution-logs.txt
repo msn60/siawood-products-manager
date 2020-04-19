@@ -259,3 +259,81 @@ Number of success updated product: 1240
 Number of failed updated product: 2529
 
 
+Log message of : Update process results [on 2020-04-20  00:34:23]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+
+Log message of : Update process results [on 2020-04-20  00:36:59]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+
+Log message of : Update process results [on 2020-04-20  00:40:33]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+
+Log message of : Update process results [on 2020-04-20  00:42:19]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+
+Log message of : Update process results [on 2020-04-20  00:42:21]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+
+Log message of : Update process results [on 2020-04-20  00:45:20]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+
+Log message of : Update process results [on 2020-04-20  00:51:52]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+
+Log message of : Update process results [on 2020-04-20  01:00:05]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+
+Log message of : Update process results [on 2020-04-20  01:01:53]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+
+Log message of : Update process results [on 2020-04-20  01:05:23]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+
+Log message of : Update process results [on 2020-04-20  01:07:59]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+
+Log message of : Update process results [on 2020-04-20  01:11:33]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+
+Log message of : Update process results [on 2020-04-20  01:16:19]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2529
+
+

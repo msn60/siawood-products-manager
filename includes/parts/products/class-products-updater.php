@@ -194,6 +194,7 @@ class Products_Updater implements Action_Hook_Interface {
 		$email->register_add_filter_with_arguments( $log_in_footer_object, 'product update process' );
 
 
+
 	}
 
 
