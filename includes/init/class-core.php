@@ -297,7 +297,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 				'Warning for not executing plugin process'
 			);
 			$notification_email = new Custom_Email( 'webservice_wrong_ip', $this->get_email_subjects(), $this->get_email_templates() );
-			$notification_email->register_add_filter_with_arguments( $this->log_in_footer );
+			$notification_email->register_add_filter_with_arguments( $this->log_in_footer, 'wrong api url' );
 			//update_option( 'swdprd_has_log_for_wrong_url', 'yes' );
 		}
 
@@ -333,7 +333,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 				update_option( 'swdprd_has_log_for_webservice_issue', 'no' );
 			}
 			//$this->update_stocks_amount( new Log_In_Footer(), $result['product_items'], $result['count'] );
-			$result['product_items'] = null;
+			/*$result['product_items'] = null;
 			$result['product_items'] = [
 				[
 					'sku'   => '1471163101142',
@@ -359,7 +359,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 					'sku'   => '14711639999',
 					'stock' =>  '4',
 				],
-			];
+			];*/
 
 			$this->products_updater->set_product_items( $result['product_items'] );
 			$this->products_updater->set_first_product_counts( $result['count'] );
@@ -384,7 +384,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 				'Warning for problem in accessing to webservice'
 			);
 			$notification_email = new Custom_Email( 'webservice_is_not_accessible', $this->get_email_subjects(), $this->get_email_templates() );
-			$notification_email->register_add_filter_with_arguments( $this->log_in_footer );
+			$notification_email->register_add_filter_with_arguments( $this->log_in_footer, 'not accessible webservice' );
 
 		}
 
@@ -405,7 +405,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			);
 
 			$notification_email = new Custom_Email( 'woocommerce_disable', $this->get_email_subjects(), $this->get_email_templates() );
-			$notification_email->register_add_filter_with_arguments( $this->log_in_footer );
+			$notification_email->register_add_filter_with_arguments( $this->log_in_footer, 'disabling woocommerce' );
 			update_option( 'swdprd_has_log_for_deactivating_woocommerce', 'yes' );
 		}
 		$this->admin_notices['woocommerce_deactivate_notice']->register_add_action();
@@ -476,53 +476,6 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 */
 	public function get_version() {
 		return $this->plugin_version;
-	}
-
-	/**
-	 * Method to update stocks amount
-	 *
-	 * @param Log_In_Footer $log_in_footer_object
-	 * @param array         $product_items
-	 * @param int           $first_products_count
-	 */
-	private function set_stocks_update() {
-		$product_items = $product_items = [
-			[
-				'sku'   => '1471163101142',
-				'stock' => 0,
-			],
-			[
-				'sku'   => '1471163012022',
-				'stock' => 1,
-			],
-			[
-				'sku'   => '1471163012112',
-				'stock' => 2,
-			],
-			[
-				'sku'   => '1471163012122',
-				'stock' => 3,
-			],
-			[
-				'sku'   => '1471163012102',
-				'stock' => 4,
-			],
-		];
-		$count         = 0;
-		$temp_string   = '';
-		$new_array     = [];
-		foreach ( $product_items as $item ) {
-			$id = \wc_get_product_id_by_sku( $item['sku'] );
-			$count ++;
-			$new_array[] = [
-				'id'           => $id,
-				'stock'        => get_post_meta( (int) $id, '_stock' ),
-				'stock_status' => get_post_meta( (int) $id, '_stock_status' ),
-
-			];
-			//$temp_string .= 'SKU: ' . $item['sku'] . ' and stock: ' . $item['stock'] . PHP_EOL;
-		}
-		var_dump( $new_array );
 	}
 
 	/**

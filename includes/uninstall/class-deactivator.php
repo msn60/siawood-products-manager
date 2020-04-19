@@ -65,7 +65,7 @@ class Deactivator {
 	}
 
 	public function send_notification_email( Custom_Email $email_object, Log_In_Footer $log_in_footer_object ) {
-		$email_object->register_add_filter_with_arguments( $log_in_footer_object );
+		$email_object->register_add_filter_with_arguments( $log_in_footer_object, 'deactivating plugin' );
 	}
 
 }

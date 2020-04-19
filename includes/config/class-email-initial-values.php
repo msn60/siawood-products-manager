@@ -45,7 +45,7 @@ trait Email_Initial_Values {
 	}
 
 	public function get_email_templates( $arg = null ) {
-
+		$default_params = [];
 		$templates = [
 			'siawood_plugin_disable'       => [
 				'template' => 'email.siawood-plugin-disable',
@@ -69,7 +69,7 @@ trait Email_Initial_Values {
 			],
 			'successful_stock_update'          => [
 				'template' => 'email.product-update',
-				'params'   => [],
+				'params'   => apply_filters( 'swdprd_params_for_template', $default_params),
 				'type'     => 'front',
 			],
 		];
