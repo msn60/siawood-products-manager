@@ -139,9 +139,18 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 * @var string $writing_log_status_for_webservice_issues Options to keep status of state of writing log when has webservice issues.
 	 */
 	protected $writing_log_status_for_webservice_issues;
-
+	/**
+	 * @var array $last_update Array of last update date and time
+	 */
 	protected $last_update;
+	/**
+	 * @var array $now_date_time Array of current date and time when plugin run
+	 */
 	protected $now_date_time;
+	/**
+	 * @var array $webservice_data Array of mixed content from webservice status and data
+	 */
+	protected $webservice_data;
 
 
 	/**
@@ -167,7 +176,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		if ( defined( 'SIAWOOD_PRODUCTS_VERSION' ) ) {
 			$this->plugin_version = SIAWOOD_PRODUCTS_VERSION;
 		} else {
-			$this->plugin_version = '1.0.0';
+			$this->plugin_version = '1.0.1';
 		}
 		if ( defined( 'SIAWOOD_PRODUCTS_PLUGIN' ) ) {
 			$this->plugin_name = SIAWOOD_PRODUCTS_PLUGIN;
@@ -196,19 +205,6 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->admin_notices = $this->check_array_by_parent_type_assoc( $admin_notices, Admin_Notice::class )['valid'];;
 		}
 
-		$this->writing_log_status_for_woo_disabling     = get_option( 'swdprd_has_log_for_deactivating_woocommerce' );
-		$this->writing_log_status_for_wrong_url         = get_option( 'swdprd_has_log_for_wrong_url' );
-		$this->writing_log_status_for_webservice_issues = get_option( 'swdprd_has_log_for_webservice_issue' );
-		$this->webservice_address                       = get_option( 'swdprd_webservice_ip_address' );
-		date_default_timezone_set( 'Asia/Tehran' );
-		$this->last_update = get_option( 'swdprd_last_update' );
-		$this->now_date_time = [
-			'date' => date( 'Y-m-d' ),
-			'time' => date( 'H:i:s' ),
-		];
-		//var_dump(_get_cron_array());
-		/*var_dump($this->last_update);
-		var_dump($this->now_date_time);*/
 
 	}
 
@@ -225,11 +221,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		if ( $this->is_woocommerce_active( $this->writing_log_status_for_woo_disabling ) ) {
 			$this->register_add_action();
 			$this->register_add_filter();
-			if ( $this->check_before_start_update() ) {
-				set_time_limit(3000);
-				$this->run_stock_updater();
-			}
-
+			$this->start_updater_tasks();
 			//$this->for_testing();
 			//$this->set_shortcodes();
 		} else {
@@ -252,6 +244,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		if ( ! is_null( $this->admin_hooks ) ) {
 			$this->admin_hooks->register_add_action();
 		}
+		//add_action( 'woocommerce_settings_page_init', [ $this, 'start_updater_tasks' ] );
 	}
 
 	/**
@@ -263,6 +256,34 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		//$this->custom_cron_schedule->register_add_filter();
 	}
 
+	public function start_updater_tasks() {
+		$this->set_needed_options();
+		if ( $this->check_before_start_update() ) {
+			set_time_limit( 3000 );
+			$this->webservice_data = $this->get_webservice_data( $this->webservice_address );
+			if ( ! $this->webservice_data['connection_status'] ) {
+				$this->set_tasks_when_webservice_not_accessible( new Log_In_Footer(), $this->webservice_data['error_message'] );
+			} else {
+				$this->run_stock_updater();
+			}
+
+		}
+	}
+
+	private function set_needed_options() {
+
+		$this->writing_log_status_for_woo_disabling     = get_option( 'swdprd_has_log_for_deactivating_woocommerce' );
+		$this->writing_log_status_for_wrong_url         = get_option( 'swdprd_has_log_for_wrong_url' );
+		$this->writing_log_status_for_webservice_issues = get_option( 'swdprd_has_log_for_webservice_issue' );
+		$this->webservice_address                       = get_option( 'swdprd_webservice_ip_address' );
+		date_default_timezone_set( 'Asia/Tehran' );
+		$this->last_update   = get_option( 'swdprd_last_update' );
+		$this->now_date_time = [
+			'date' => date( 'Y-m-d' ),
+			'time' => date( 'H:i:s' ),
+		];
+	}
+
 	/**
 	 * Method to check needed data for update before starting update process
 	 *
@@ -271,35 +292,20 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	private function check_before_start_update() {
 		if ( ! $this->is_valid_url( $this->webservice_address ) ) {
 			$this->set_tasks_when_url_wrong( new Log_In_Footer() );
-			update_option( 'swdprd_has_log_for_wrong_url', 'yes' );
+
 			return false;
 		} else {
 			if ( 'yes' === $this->writing_log_status_for_wrong_url ) {
-				update_option( 'swdprd_has_log_for_wrong_url', 'no' );
+				update_option( 'swdprd_has_log_for_wrong_url', 'no', false );
 			}
-			/*var_dump($now_date_time['date']);
-			var_dump($this->last_update['date']);*/
-			/*var_dump(strtotime( $this->now_date_time['date'] ));
-			var_dump(strtotime( $this->last_update['date'] ));*/
-			if ( strtotime( $this->now_date_time['date'] ) > strtotime( $this->last_update['date'] ) || $this->check_last_execution_date()) {
+			if ( strtotime( $this->now_date_time['date'] ) > strtotime( $this->last_update['date'] )
+			     || $this->check_execution_file_end( $this->now_date_time['date'], 20 )
+				 || $this->check_execution_file_end( 'Warning for problem in accessing to webservice' )
+			) {
 				return true;
 			}
-			return false;
-		}
-	}
 
-	/**
-	 * Check last execution date in log-execution file
-	 *
-	 * @return bool
-	 */
-	private function check_last_execution_date() {
-		$result = $this->get_file_end(SIAWOOD_PRODUCTS_EXECUTION_LOG, 20);
-		$now = $this->now_date_time['date'];
-		if (preg_match("/$now/", $result)) {
 			return false;
-		} else {
-			return true;
 		}
 	}
 
@@ -308,21 +314,39 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 */
 	private function set_tasks_when_url_wrong( Log_In_Footer $log_in_footer_object ) {
 
-		if ( false === $this->writing_log_status_for_wrong_url || 'no' === $this->writing_log_status_for_wrong_url ) {
+		if ( false === $this->writing_log_status_for_wrong_url || 'no' === $this->writing_log_status_for_wrong_url
+		     || $this->check_execution_file_end( 'Warning for wrong url' )
+		) {
 			$this->log_in_footer = $log_in_footer_object;
 			$this->write_log_during_execution(
 				$this->log_in_footer,
 				'URL for updating stocks is wrong and you must set it in Siawood setting page again!!!',
 				SIAWOOD_PRODUCTS_EXECUTION_LOG,
-				'Warning for not executing plugin process'
+				'Warning for wrong url (not executing plugin process)'
 			);
 			$notification_email = new Custom_Email( 'webservice_wrong_ip', $this->get_email_subjects(), $this->get_email_templates() );
 			$notification_email->register_add_filter_with_arguments( $this->log_in_footer, 'wrong api url' );
-			//update_option( 'swdprd_has_log_for_wrong_url', 'yes' );
+			update_option( 'swdprd_has_log_for_wrong_url', 'yes', false );
+			update_option( 'swdprd_has_log_for_webservice_issue', 'no', false );
+
 		}
 
 		$this->admin_notices['wrong_url_notice']->register_add_action();
 
+	}
+
+	/**
+	 * Check last n line  in log-execution file
+	 *
+	 * @return bool
+	 */
+	private function check_execution_file_end( $message, $line_number = 4, $file = SIAWOOD_PRODUCTS_EXECUTION_LOG ) {
+		$result = $this->get_file_end( $file, $line_number );
+		if ( preg_match( "/$message/", $result ) ) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	/**
@@ -343,60 +367,12 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	}
 
 	/**
-	 * Run updater to update stock amounts for all products in Woocommerce
-	 */
-	private function run_stock_updater() {
-		//$result = $this->get_webservice_data( 'http://94.139.176.26:890/api/stock' ); //sample to test http request errors
-		$result = $this->get_webservice_data( $this->webservice_address );
-		if ( $result['connection_status'] ) {
-			if ( 'yes' === $this->writing_log_status_for_webservice_issues ) {
-				update_option( 'swdprd_has_log_for_webservice_issue', 'no' );
-			}
-			//$this->update_stocks_amount( new Log_In_Footer(), $result['product_items'], $result['count'] );
-			/*$result['product_items'] = null;
-			$result['product_items'] = [
-				[
-					'sku'   => '1471163101142',
-					'stock' =>  '100',
-				],
-				[
-					'sku'   => '1471163012022',
-					'stock' =>  '0',
-				],
-				[
-					'sku'   => '1471163012112',
-					'stock' =>  '200',
-				],
-				[
-					'sku'   => '1471163012122',
-					'stock' =>  '300',
-				],
-				[
-					'sku'   => '1471163012102',
-					'stock' =>  '400',
-				],
-				[
-					'sku'   => '14711639999',
-					'stock' =>  '4',
-				],
-			];*/
-
-			$this->products_updater->set_product_items( $result['product_items'] );
-			$this->products_updater->set_first_product_counts( $result['count'] );
-			$this->products_updater->register_add_action();
-
-		} else {
-			$this->set_tasks_when_webservice_not_accessible( new Log_In_Footer(), $result['error_message'] );
-			update_option( 'swdprd_has_log_for_webservice_issue', 'yes' );
-
-		}
-	}
-
-	/**
 	 * Tasks when we have webservice issues.
 	 */
 	private function set_tasks_when_webservice_not_accessible( Log_In_Footer $log_in_footer_object, $log_message ) {
-		if ( false === $this->writing_log_status_for_webservice_issues || 'no' === $this->writing_log_status_for_webservice_issues ) {
+		if ( false === $this->writing_log_status_for_webservice_issues || 'no' === $this->writing_log_status_for_webservice_issues
+		     || $this->check_execution_file_end( 'Warning for problem in accessing to webservice' )
+		) {
 			$this->log_in_footer = $log_in_footer_object;
 			$this->write_log_during_execution(
 				$this->log_in_footer,
@@ -406,8 +382,55 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			);
 			$notification_email = new Custom_Email( 'webservice_is_not_accessible', $this->get_email_subjects(), $this->get_email_templates() );
 			$notification_email->register_add_filter_with_arguments( $this->log_in_footer, 'not accessible webservice' );
-
+			update_option( 'swdprd_has_log_for_wrong_url', 'no', false );
+			update_option( 'swdprd_has_log_for_webservice_issue', 'yes', false );
 		}
+
+	}
+
+	/**
+	 * Run updater to update stock amounts for all products in Woocommerce
+	 */
+	private function run_stock_updater() {
+		//$result = $this->get_webservice_data( 'http://94.139.176.26:890/api/stock' ); //sample to test http request errors
+
+		//$result = $this->get_webservice_data( $this->webservice_address );
+
+		if ( 'yes' === $this->writing_log_status_for_webservice_issues ) {
+			update_option( 'swdprd_has_log_for_webservice_issue', 'no', false );
+		}
+		//$this->update_stocks_amount( new Log_In_Footer(), $result['product_items'], $result['count'] );
+		/*$result['product_items'] = null;
+		$result['product_items'] = [
+			[
+				'sku'   => '1471163101142',
+				'stock' =>  '100',
+			],
+			[
+				'sku'   => '1471163012022',
+				'stock' =>  '0',
+			],
+			[
+				'sku'   => '1471163012112',
+				'stock' =>  '200',
+			],
+			[
+				'sku'   => '1471163012122',
+				'stock' =>  '300',
+			],
+			[
+				'sku'   => '1471163012102',
+				'stock' =>  '400',
+			],
+			[
+				'sku'   => '14711639999',
+				'stock' =>  '4',
+			],
+		];*/
+
+		$this->products_updater->set_product_items( $this->webservice_data['product_items'] );
+		$this->products_updater->set_first_product_counts( $this->webservice_data['count'] );
+		$this->products_updater->register_add_action();
 
 	}
 
@@ -478,6 +501,21 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 */
 	public function get_version() {
 		return $this->plugin_version;
+	}
+
+	/**
+	 * Check last execution date in log-execution file
+	 *
+	 * @return bool
+	 */
+	private function check_last_execution_date() {
+		$result = $this->get_file_end( SIAWOOD_PRODUCTS_EXECUTION_LOG, 20 );
+		$now    = $this->now_date_time['date'];
+		if ( preg_match( "/$now/", $result ) ) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	/**

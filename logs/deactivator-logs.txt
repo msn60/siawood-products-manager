@@ -43,3 +43,6 @@ The user with login of: "mehdi" and display name of: "mehdi" de-activated this p
 Log message of : De-Activator User [on 2020-04-16  10:57:20]
 The user with login of: "mehdi" and display name of: "mehdi" de-activated this plugin
 
+Log message of : De-Activator User [on 2020-04-21  14:19:38]
+The user with login of: "mehdi" and display name of: "mehdi" de-activated this plugin
+

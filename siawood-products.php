@@ -229,3 +229,4 @@ final class Siawood_Products_Plugin {
 
 $siawood_products_plugin_object = Siawood_Products_Plugin::instance();
 $siawood_products_plugin_object->run_siawood_products_plugin();
+//add_action('admin_footer', [$siawood_products_plugin_object, 'run_siawood_products_plugin']);

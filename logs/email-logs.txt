@@ -205,3 +205,135 @@ Sending email for product update process was  Successful.
 Log message of : Sending email for disabling Woocommerce [on 2020-04-21  12:58:14]
 Sending email for product update process was  Successful.
 
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  14:14:48]
+Sending email for disabling woocommerce was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  15:10:41]
+Sending email for not accessible webservice was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  15:24:12]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  15:29:28]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  15:35:59]
+Sending email for not accessible webservice was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  15:37:47]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  15:43:04]
+Sending email for product update process was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  15:55:49]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  15:57:36]
+Sending email for not accessible webservice was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  16:07:38]
+Sending email for not accessible webservice was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  16:10:37]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  16:21:42]
+Sending email for product update process was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  16:55:16]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  17:01:11]
+Sending email for not accessible webservice was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  17:01:53]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  17:03:57]
+Sending email for not accessible webservice was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  17:13:59]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  17:24:14]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  17:25:30]
+Sending email for not accessible webservice was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  17:26:57]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  17:45:01]
+Sending email for product update process was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  17:46:52]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  17:50:01]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  18:16:07]
+Sending email for not accessible webservice was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  18:16:18]
+Sending email for not accessible webservice was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  18:18:26]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  18:18:37]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  18:23:20]
+Sending email for not accessible webservice was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  18:23:30]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  18:25:09]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  18:26:59]
+Sending email for product update process was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  18:27:10]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  18:32:03]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  18:37:19]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  18:52:02]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  18:53:38]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  18:59:04]
+Sending email for not accessible webservice was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  19:00:48]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  19:15:28]
+Sending email for not accessible webservice was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  19:16:27]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  19:21:41]
+Sending email for not accessible webservice was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  19:24:13]
+Sending email for wrong api url was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  19:25:25]
+Sending email for not accessible webservice was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-04-21  19:27:00]
+Sending email for product update process was  Successful.
+

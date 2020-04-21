@@ -211,7 +211,9 @@ class Products_Updater implements Action_Hook_Interface {
 			'date' => date( 'Y-m-d' ),
 			'time' => date( 'H:i:s' ),
 		];
-		update_option( 'swdprd_last_update', $now_date_time );
+		update_option( 'swdprd_last_update', $now_date_time, false );
+		update_option( 'swdprd_has_log_for_wrong_url', 'no', false );
+		update_option( 'swdprd_has_log_for_webservice_issue', 'no', false );
 	}
 
 

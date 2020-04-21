@@ -343,9 +343,4 @@ Number of success updated product: 1240
 Number of failed updated product: 2529
 
 
-Log message of : Update process results [on 2020-04-21  12:58:07]
-Update process is succesfully done
-Number of success updated product: 1240
-Number of failed updated product: 2529
-
 
