@@ -342,20 +342,10 @@ Update process is succesfully done
 Number of success updated product: 1240
 Number of failed updated product: 2529
 
-
-Log message of : Warning for wrong url (not executing plugin process) [on 2020-04-21  19:49:42]
-URL for updating stocks is wrong and you must set it in Siawood setting page again!!!
-
-Log message of : Warning for problem in accessing to webservice [on 2020-04-21  19:51:29]
+Log message of : Warning for problem in accessing to webservice [on 2020-04-21  21:23:41]
 cURL error 7: Failed to connect to 94.139.176.26 port 890: Connection refused
 
-Log message of : Warning for wrong url (not executing plugin process) [on 2020-04-21  19:52:30]
-URL for updating stocks is wrong and you must set it in Siawood setting page again!!!
-
-Log message of : Warning for problem in accessing to webservice [on 2020-04-21  19:54:09]
-cURL error 7: Failed to connect to 94.139.176.26 port 890: Connection refused
-
-Log message of : Update process results [on 2020-04-21  19:56:45]
+Log message of : Update process results [on 2020-04-21  21:28:35]
 Update process is succesfully done
 Number of success updated product: 1240
 Number of failed updated product: 2529

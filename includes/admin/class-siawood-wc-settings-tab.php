@@ -46,6 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Siawood_WC_Settings_Tab extends \WC_Settings_Page {
 	use Siawood_Initial_Values;
 	use Template_Builder;
+
 	public function __construct() {
 
 		$this->id    = 'siawood';
@@ -66,10 +67,11 @@ class Siawood_WC_Settings_Tab extends \WC_Settings_Page {
 	 * @return array
 	 */
 	public function get_sections() {
-		$sections = array(
-			''    => __( 'تنظیمات عمومی', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
-			'log' => __( 'گزارش ها', SIAWOOD_PRODUCTS_TEXTDOMAIN )
-		);
+		$sections = [
+			''              => __( 'تنظیمات عمومی', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+			'log'           => __( 'گزارش ها', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+			'manual_update' => __( 'به روز رسانی دستی', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+		];
 
 		return apply_filters( 'woocommerce_get_sections_' . $this->id, $sections );
 	}
@@ -97,7 +99,10 @@ class Siawood_WC_Settings_Tab extends \WC_Settings_Page {
 		switch ( $current_section ) {
 			case 'log':
 				//include SIAWOOD_PRODUCTS_PATH . 'templates/admin/settings-page/log-section.php';
-				$this->load_template('settings-page.log-section');
+				$this->load_template( 'settings-page.log-section' );
+				break;
+			case 'manual_update':
+				$settings = $this->get_siawood_manual_update_settings_page_elements( $prefix );
 				break;
 			default:
 				$settings = $this->get_siawood_general_settings_page_elements( $prefix );

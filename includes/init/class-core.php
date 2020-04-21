@@ -205,6 +205,8 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->admin_notices = $this->check_array_by_parent_type_assoc( $admin_notices, Admin_Notice::class )['valid'];;
 		}
 
+		$this->writing_log_status_for_woo_disabling = get_option( 'swdprd_has_log_for_deactivating_woocommerce' );
+
 
 	}
 
@@ -271,8 +273,6 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	}
 
 	private function set_needed_options() {
-
-		$this->writing_log_status_for_woo_disabling     = get_option( 'swdprd_has_log_for_deactivating_woocommerce' );
 		$this->writing_log_status_for_wrong_url         = get_option( 'swdprd_has_log_for_wrong_url' );
 		$this->writing_log_status_for_webservice_issues = get_option( 'swdprd_has_log_for_webservice_issue' );
 		$this->webservice_address                       = get_option( 'swdprd_webservice_ip_address' );
@@ -296,11 +296,11 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			return false;
 		} else {
 			if ( 'yes' === $this->writing_log_status_for_wrong_url ) {
-				update_option( 'swdprd_has_log_for_wrong_url', 'no');
+				update_option( 'swdprd_has_log_for_wrong_url', 'no' );
 			}
 			if ( strtotime( $this->now_date_time['date'] ) > strtotime( $this->last_update['date'] )
 			     || $this->check_execution_file_end( $this->now_date_time['date'], 20 )
-				 || $this->check_execution_file_end( 'Warning for problem in accessing to webservice' )
+
 			) {
 				return true;
 			}
@@ -327,7 +327,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$notification_email = new Custom_Email( 'webservice_wrong_ip', $this->get_email_subjects(), $this->get_email_templates() );
 			$notification_email->register_add_filter_with_arguments( $this->log_in_footer, 'wrong api url' );
 			update_option( 'swdprd_has_log_for_wrong_url', 'yes' );
-			update_option( 'swdprd_has_log_for_webservice_issue', 'no');
+			update_option( 'swdprd_has_log_for_webservice_issue', 'no' );
 
 		}
 
@@ -383,7 +383,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$notification_email = new Custom_Email( 'webservice_is_not_accessible', $this->get_email_subjects(), $this->get_email_templates() );
 			$notification_email->register_add_filter_with_arguments( $this->log_in_footer, 'not accessible webservice' );
 			update_option( 'swdprd_has_log_for_wrong_url', 'no' );
-			update_option( 'swdprd_has_log_for_webservice_issue', 'yes');
+			update_option( 'swdprd_has_log_for_webservice_issue', 'yes' );
 		}
 
 	}

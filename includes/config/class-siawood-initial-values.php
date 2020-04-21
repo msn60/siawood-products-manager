@@ -154,4 +154,26 @@ trait Siawood_Initial_Values {
 
 		return $settings;
 	}
+	public function get_siawood_manual_update_settings_page_elements( $prefix ) {
+
+		$settings = [
+			[
+
+				'name' => __( 'اجرای دستی بروز رسانی محصولات', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'type' => 'title',
+				'id'   => $prefix . 'manual_update_webservice_settings'
+			],
+			[
+				'id'   => '',
+				'name' => __( 'تنظیمات وب سرویس', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'type' => 'sectionend',
+				'desc' => '',
+				'id'   => $prefix . 'manual_update_webservice_settings'
+			],
+
+
+		];
+
+		return $settings;
+	}
 }
