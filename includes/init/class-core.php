@@ -164,8 +164,8 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 */
 	public function __construct(
 		Initial_Value $initial_values,
-		Custom_Cron_Schedule $custom_cron_schedule = null,
-		/*Init_Functions $init_functions = null,
+		/*Custom_Cron_Schedule $custom_cron_schedule = null,
+		Init_Functions $init_functions = null,
 		I18n $plugin_i18n = null,*/
 		Admin_Hook $admin_hooks = null,
 		Products_Updater $products_updater,
@@ -194,9 +194,9 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->products_updater = $products_updater;
 		}
 
-		if ( ! is_null( $custom_cron_schedule ) ) {
+		/*if ( ! is_null( $custom_cron_schedule ) ) {
 			$this->custom_cron_schedule = $custom_cron_schedule;
-		}
+		}*/
 
 		if ( ! is_null( $shortcodes ) ) {
 			$this->shortcodes = $this->check_array_by_parent_type( $shortcodes, Shortcode::class )['valid'];;
@@ -296,7 +296,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			return false;
 		} else {
 			if ( 'yes' === $this->writing_log_status_for_wrong_url ) {
-				update_option( 'swdprd_has_log_for_wrong_url', 'no', false );
+				update_option( 'swdprd_has_log_for_wrong_url', 'no');
 			}
 			if ( strtotime( $this->now_date_time['date'] ) > strtotime( $this->last_update['date'] )
 			     || $this->check_execution_file_end( $this->now_date_time['date'], 20 )
@@ -326,8 +326,8 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			);
 			$notification_email = new Custom_Email( 'webservice_wrong_ip', $this->get_email_subjects(), $this->get_email_templates() );
 			$notification_email->register_add_filter_with_arguments( $this->log_in_footer, 'wrong api url' );
-			update_option( 'swdprd_has_log_for_wrong_url', 'yes', false );
-			update_option( 'swdprd_has_log_for_webservice_issue', 'no', false );
+			update_option( 'swdprd_has_log_for_wrong_url', 'yes' );
+			update_option( 'swdprd_has_log_for_webservice_issue', 'no');
 
 		}
 
@@ -382,8 +382,8 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			);
 			$notification_email = new Custom_Email( 'webservice_is_not_accessible', $this->get_email_subjects(), $this->get_email_templates() );
 			$notification_email->register_add_filter_with_arguments( $this->log_in_footer, 'not accessible webservice' );
-			update_option( 'swdprd_has_log_for_wrong_url', 'no', false );
-			update_option( 'swdprd_has_log_for_webservice_issue', 'yes', false );
+			update_option( 'swdprd_has_log_for_wrong_url', 'no' );
+			update_option( 'swdprd_has_log_for_webservice_issue', 'yes');
 		}
 
 	}
@@ -397,7 +397,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		//$result = $this->get_webservice_data( $this->webservice_address );
 
 		if ( 'yes' === $this->writing_log_status_for_webservice_issues ) {
-			update_option( 'swdprd_has_log_for_webservice_issue', 'no', false );
+			update_option( 'swdprd_has_log_for_webservice_issue', 'no' );
 		}
 		//$this->update_stocks_amount( new Log_In_Footer(), $result['product_items'], $result['count'] );
 		/*$result['product_items'] = null;

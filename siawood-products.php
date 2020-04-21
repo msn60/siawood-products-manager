@@ -208,8 +208,8 @@ final class Siawood_Products_Plugin {
 		$this->initial_values = new Initial_Value();
 		$this->core_object    = new Core(
 			$this->initial_values,
-			new Custom_Cron_Schedule( $this->initial_values->sample_custom_cron_schedule() ),
-			/*new Init_Functions(),
+			/*new Custom_Cron_Schedule( $this->initial_values->sample_custom_cron_schedule() ),
+			new Init_Functions(),
 			new I18n(),*/
 			new Admin_Hook( SIAWOOD_PRODUCTS_PLUGIN, SIAWOOD_PRODUCTS_VERSION ),
 			new Products_Updater(),
