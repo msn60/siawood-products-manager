@@ -132,11 +132,19 @@ class Constant {
 		}
 
 		/**
-		 * SIAWOOD_PRODUCTS_TPL constant.
-		 * It is used to specify template urls inside templates directory.
+		 * SIAWOOD_PRODUCTS_LOG constant.
+		 * It is used to specify path of log files
 		 */
 		if ( ! defined( 'SIAWOOD_PRODUCTS_LOGS' ) ) {
 			define( 'SIAWOOD_PRODUCTS_LOGS', trailingslashit( SIAWOOD_PRODUCTS_PATH . 'logs' ) );
+		}
+
+		/**
+		 * SIAWOOD_PRODUCTS_EXECUTION_LOG constant.
+		 * It is used to specify path of execution log file
+		 */
+		if ( ! defined( 'SIAWOOD_PRODUCTS_EXECUTION_LOG' ) ) {
+			define( 'SIAWOOD_PRODUCTS_EXECUTION_LOG',  SIAWOOD_PRODUCTS_LOGS  . 'execution-logs.txt'  );
 		}
 
 		/**

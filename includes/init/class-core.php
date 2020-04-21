@@ -29,7 +29,7 @@ use Siawood_Products\Includes\Interfaces\{
 };
 use Siawood_Products\Includes\Config\Initial_Value;
 use Siawood_Products\Includes\Functions\{
-	Check_Woocommerce, Init_Functions, Logger, Url_Checker, Utility, Check_Type, Web_Service, Log_In_Footer
+	Check_Woocommerce, File_End_Reader, Init_Functions, Logger, Url_Checker, Utility, Check_Type, Web_Service, Log_In_Footer
 };
 
 use Siawood_Products\Includes\Parts\Email\Custom_Email;
@@ -57,6 +57,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	use Logger;
 	use Url_Checker;
 	use Email_Initial_Values;
+	use File_End_Reader;
 	/**
 	 * The unique identifier of this plugin.
 	 *
@@ -176,14 +177,6 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 
 		$this->initial_values = $initial_values;
 
-		/*if ( ! is_null( $init_functions ) ) {
-			$this->init_functions = $init_functions;
-		}
-
-		if ( ! is_null( $plugin_i18n ) ) {
-			$this->plugin_i18n = $plugin_i18n;
-		}*/
-
 		if ( ! is_null( $admin_hooks ) ) {
 			$this->admin_hooks = $admin_hooks;
 		}
@@ -213,6 +206,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			'date' => date( 'Y-m-d' ),
 			'time' => date( 'H:i:s' ),
 		];
+		//var_dump(_get_cron_array());
 		/*var_dump($this->last_update);
 		var_dump($this->now_date_time);*/
 
@@ -232,6 +226,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->register_add_action();
 			$this->register_add_filter();
 			if ( $this->check_before_start_update() ) {
+				set_time_limit(3000);
 				$this->run_stock_updater();
 			}
 
@@ -286,11 +281,25 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			var_dump($this->last_update['date']);*/
 			/*var_dump(strtotime( $this->now_date_time['date'] ));
 			var_dump(strtotime( $this->last_update['date'] ));*/
-			if ( strtotime( $this->now_date_time['date'] ) > strtotime( $this->last_update['date'] ) ) {
+			if ( strtotime( $this->now_date_time['date'] ) > strtotime( $this->last_update['date'] ) || $this->check_last_execution_date()) {
 				return true;
 			}
-
 			return false;
+		}
+	}
+
+	/**
+	 * Check last execution date in log-execution file
+	 *
+	 * @return bool
+	 */
+	private function check_last_execution_date() {
+		$result = $this->get_file_end(SIAWOOD_PRODUCTS_EXECUTION_LOG, 20);
+		$now = $this->now_date_time['date'];
+		if (preg_match("/$now/", $result)) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 
@@ -304,7 +313,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->write_log_during_execution(
 				$this->log_in_footer,
 				'URL for updating stocks is wrong and you must set it in Siawood setting page again!!!',
-				SIAWOOD_PRODUCTS_LOGS . 'execution-logs.txt',
+				SIAWOOD_PRODUCTS_EXECUTION_LOG,
 				'Warning for not executing plugin process'
 			);
 			$notification_email = new Custom_Email( 'webservice_wrong_ip', $this->get_email_subjects(), $this->get_email_templates() );
@@ -375,7 +384,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->products_updater->set_product_items( $result['product_items'] );
 			$this->products_updater->set_first_product_counts( $result['count'] );
 			$this->products_updater->register_add_action();
-			update_option( 'swdprd_last_update', $this->now_date_time );
+
 		} else {
 			$this->set_tasks_when_webservice_not_accessible( new Log_In_Footer(), $result['error_message'] );
 			update_option( 'swdprd_has_log_for_webservice_issue', 'yes' );
@@ -392,7 +401,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->write_log_during_execution(
 				$this->log_in_footer,
 				$log_message,
-				SIAWOOD_PRODUCTS_LOGS . 'execution-logs.txt',
+				SIAWOOD_PRODUCTS_EXECUTION_LOG,
 				'Warning for problem in accessing to webservice'
 			);
 			$notification_email = new Custom_Email( 'webservice_is_not_accessible', $this->get_email_subjects(), $this->get_email_templates() );
@@ -412,7 +421,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->write_log_during_execution(
 				$this->log_in_footer,
 				'Woocommerce plugin is not active. Due to this reason, this plugin can not run normally!!!',
-				SIAWOOD_PRODUCTS_LOGS . 'execution-logs.txt',
+				SIAWOOD_PRODUCTS_EXECUTION_LOG,
 				'Warning for not executing plugin process'
 			);
 
@@ -446,16 +455,8 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$temp_string .= 'SKU: ' . $item['sku'] . ' and stock: ' . $item['stock'] . PHP_EOL;
 			/*$this->append_log_in_text_file(
 				'SKU: ' . $item['sku'] . ' and stock: ' . $item['stock'],
-				SIAWOOD_PRODUCTS_LOGS . 'list-of-products.txt', 'ghanbar' );*/
+				SIAWOOD_PRODUCTS_LOGS . 'list-of-products.txt', 'list of products' );*/
 		}
-
-		$this->log_in_footer = $log_in_footer_object;
-		$this->write_log_during_execution(
-			$this->log_in_footer,
-			$temp_string,
-			SIAWOOD_PRODUCTS_LOGS . 'list-of-products.txt',
-			'First part'
-		);
 	}
 
 	/**

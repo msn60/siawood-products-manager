@@ -108,6 +108,12 @@ class Products_Updater implements Action_Hook_Interface {
 	public function register_add_action() {
 		add_filter( 'swdprd_params_for_template', [ $this, 'filter_template_params' ] );
 		add_action( 'plugins_loaded', [ $this, 'update_stocks_amount' ] );
+		if ( is_admin() ) {
+			add_action( 'admin_footer', [ $this, 'update_last_update_option' ], 999 );
+		} else {
+			add_action( 'wp_footer', [ $this, 'update_last_update_option' ], 999 );
+		}
+
 	}
 
 	public function filter_template_params( $args ) {
@@ -148,7 +154,7 @@ class Products_Updater implements Action_Hook_Interface {
 				'successful_stock_update',
 				$this->get_email_subjects(),
 				//$email_template
-			$this->get_email_templates()
+				$this->get_email_templates()
 			),
 			new Log_In_Footer()
 		);
@@ -158,14 +164,14 @@ class Products_Updater implements Action_Hook_Interface {
 	 * Tasks which is needed if Woocommerce is not active.
 	 */
 	private function set_tasks_after_update_process( Custom_Email $email, Log_In_Footer $log_in_footer_object ) {
-		date_default_timezone_set('Asia/Tehran');
+		date_default_timezone_set( 'Asia/Tehran' );
 		$log_message = 'Update process is succesfully done' . PHP_EOL;
 		$log_message .= 'Number of success updated product: ' . $this->success_update_products_count . PHP_EOL;
 		$log_message .= 'Number of failed updated product: ' . $this->fail_update_products_count . PHP_EOL;
 		$this->write_log_during_execution(
 			$log_in_footer_object,
 			$log_message,
-			SIAWOOD_PRODUCTS_LOGS . 'execution-logs.txt',
+			SIAWOOD_PRODUCTS_EXECUTION_LOG,
 			'Update process results'
 		);
 
@@ -194,7 +200,18 @@ class Products_Updater implements Action_Hook_Interface {
 		$email->register_add_filter_with_arguments( $log_in_footer_object, 'product update process' );
 
 
+	}
 
+	/**
+	 * Update swdprd_last_update in options table
+	 */
+	public function update_last_update_option() {
+		date_default_timezone_set( 'Asia/Tehran' );
+		$now_date_time = [
+			'date' => date( 'Y-m-d' ),
+			'time' => date( 'H:i:s' ),
+		];
+		update_option( 'swdprd_last_update', $now_date_time );
 	}
 
 
