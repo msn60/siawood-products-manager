@@ -135,12 +135,13 @@ trait Siawood_Initial_Values {
 				'desc_tip' => __( 'آدرس ایمیلی که اطلاعات مرتبط با پلاگین به آن ارسال می شود، در این قسمت وارد می شود', SIAWOOD_PRODUCTS_TEXTDOMAIN )
 			],
 			[
-				'id'      => $prefix . 'is_need_send_email_daily',
-				'name'    => __( 'تنظیمات ارسال ایمیل', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
-				'type'    => 'checkbox',
-				'desc'    => __( 'ارسال ایمیل بعد از انجام آپدیت موجودی محصولات', SIAWOOD_PRODUCTS_TEXTDOMAIN),
-				'desc_tip' => __( 'در صورتی که می خواهید بعد از هر بار آپدیت موجودی، با ایمیل به شما اطلاع رسانی شود، این گزینه را فعال کنید', SIAWOOD_PRODUCTS_TEXTDOMAIN),
-				'default' => 'yes'
+				'id'       => $prefix . 'is_need_send_email_daily',
+				'name'     => __( 'تنظیمات ارسال ایمیل', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'type'     => 'checkbox',
+				'desc'     => __( 'ارسال ایمیل بعد از انجام آپدیت موجودی محصولات', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'desc_tip' => __( 'در صورتی که می خواهید بعد از هر بار آپدیت موجودی، با ایمیل به شما اطلاع رسانی شود، این گزینه را فعال کنید',
+					SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'default'  => 'yes'
 			],
 			[
 				'id'   => '',
@@ -154,6 +155,7 @@ trait Siawood_Initial_Values {
 
 		return $settings;
 	}
+
 	public function get_siawood_manual_update_settings_page_elements( $prefix ) {
 
 		$settings = [
@@ -162,6 +164,15 @@ trait Siawood_Initial_Values {
 				'name' => __( 'اجرای دستی بروز رسانی محصولات', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
 				'type' => 'title',
 				'id'   => $prefix . 'manual_update_webservice_settings'
+			],
+			[
+				'id'       => $prefix . 'is_need_update_stock_manually',
+				'name'     => __( 'به روز رسانی انبار', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'type'     => 'checkbox',
+				'desc'     => __( 'به روز رسانی محصولات به صورت دستی', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'desc_tip' => __( 'در صورتی که می خواهید برنامه آپدیت انبار به صورتی فوری اجرا شود، از این گزینه استفاده کنید',
+					SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'default'  => 'yes'
 			],
 			[
 				'id'   => '',

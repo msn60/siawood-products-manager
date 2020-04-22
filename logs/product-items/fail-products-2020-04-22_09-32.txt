@@ -1,4 +1,4 @@
-Log message of : Fail Products in Update Process [on 2020-04-21  21:28:35]
+Log message of : Fail Products in Update Process [on 2020-04-22  09:32:45]
 93024461228040611322
 9297004063145
 9297004063135
@@ -2533,6 +2533,8 @@ Log message of : Fail Products in Update Process [on 2020-04-21  21:28:35]
 1080100018122
 1080100016122
 1080100014122
+0031811085132104
+00318110851321
 0012205170165
 
 

@@ -151,6 +151,10 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 * @var array $webservice_data Array of mixed content from webservice status and data
 	 */
 	protected $webservice_data;
+	/**
+	 * @var bool $is_need_manual_update
+	 */
+	protected $is_need_manual_update;
 
 
 	/**
@@ -206,8 +210,15 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		}
 
 		$this->writing_log_status_for_woo_disabling = get_option( 'swdprd_has_log_for_deactivating_woocommerce' );
-
-
+		if ( isset( $_POST ) && ! empty( $_POST ) ) {
+			if ( isset($_POST['swdprd_is_need_update_stock_manually']) && '1' === $_POST['swdprd_is_need_update_stock_manually'] ) {
+				$this->is_need_manual_update = true;
+			} else {
+				$this->is_need_manual_update = false;
+			}
+		} else {
+			$this->is_need_manual_update = false;
+		}
 	}
 
 
@@ -260,7 +271,14 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 
 	public function start_updater_tasks() {
 		$this->set_needed_options();
-		if ( $this->check_before_start_update() ) {
+		if ( $this->is_need_manual_update ) {
+			$this->run_webservice_tasks();
+		} else {
+			if ( $this->check_before_start_update() ) {
+				$this->run_webservice_tasks();
+			}
+		}
+		/*if ( $this->check_before_start_update() ) {
 			set_time_limit( 3000 );
 			$this->webservice_data = $this->get_webservice_data( $this->webservice_address );
 			if ( ! $this->webservice_data['connection_status'] ) {
@@ -269,7 +287,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 				$this->run_stock_updater();
 			}
 
-		}
+		}*/
 	}
 
 	private function set_needed_options() {
@@ -282,6 +300,115 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			'date' => date( 'Y-m-d' ),
 			'time' => date( 'H:i:s' ),
 		];
+	}
+
+	public function run_webservice_tasks() {
+		set_time_limit( 3000 );
+		$this->webservice_data = $this->get_webservice_data( $this->webservice_address );
+		if ( ! $this->webservice_data['connection_status'] ) {
+			$this->set_tasks_when_webservice_not_accessible( new Log_In_Footer(), $this->webservice_data['error_message'] );
+		} else {
+			$this->run_stock_updater();
+		}
+	}
+
+	/**
+	 * Tasks when we have webservice issues.
+	 */
+	private function set_tasks_when_webservice_not_accessible( Log_In_Footer $log_in_footer_object, $log_message ) {
+		if ( false === $this->writing_log_status_for_webservice_issues || 'no' === $this->writing_log_status_for_webservice_issues
+		     || $this->check_execution_file_end( 'Warning for problem in accessing to webservice' )
+		) {
+			$this->log_in_footer = $log_in_footer_object;
+			$this->write_log_during_execution(
+				$this->log_in_footer,
+				$log_message,
+				SIAWOOD_PRODUCTS_EXECUTION_LOG,
+				'Warning for problem in accessing to webservice'
+			);
+			$notification_email = new Custom_Email( 'webservice_is_not_accessible', $this->get_email_subjects(), $this->get_email_templates() );
+			$notification_email->register_add_filter_with_arguments( $this->log_in_footer, 'not accessible webservice' );
+			update_option( 'swdprd_has_log_for_wrong_url', 'no' );
+			update_option( 'swdprd_has_log_for_webservice_issue', 'yes' );
+		}
+
+	}
+
+	/**
+	 * Check last n line  in log-execution file
+	 *
+	 * @return bool
+	 */
+	private function check_execution_file_end( $message, $line_number = 4, $file = SIAWOOD_PRODUCTS_EXECUTION_LOG ) {
+		$result = $this->get_file_end( $file, $line_number );
+		if ( preg_match( "/$message/", $result ) ) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	/**
+	 * Method to log during plugin execution
+	 *
+	 * @param Log_In_Footer $log_in_footer_object Object of Log_In_Footer class
+	 * @param string        $log_message          Log message that you need to write in log file
+	 * @param string        $file_name            The path of log file that you need to write on
+	 * @param string        $type                 Type of log file which is use in Logger trait method
+	 */
+	public function write_log_during_execution( Log_In_Footer $log_in_footer_object, string $log_message, string $file_name, string $type ) {
+		$args                = [];
+		$args['log_message'] = $log_message;
+		$args['file_name']   = $file_name;
+		$args['type']        = $type;
+		$log_in_footer_object->register_add_action_with_arguments( $args );
+
+	}
+
+	/**
+	 * Run updater to update stock amounts for all products in Woocommerce
+	 */
+	private function run_stock_updater() {
+		//$result = $this->get_webservice_data( 'http://94.139.176.26:890/api/stock' ); //sample to test http request errors
+
+		//$result = $this->get_webservice_data( $this->webservice_address );
+
+		if ( 'yes' === $this->writing_log_status_for_webservice_issues ) {
+			update_option( 'swdprd_has_log_for_webservice_issue', 'no' );
+		}
+		//$this->update_stocks_amount( new Log_In_Footer(), $result['product_items'], $result['count'] );
+		/*$result['product_items'] = null;
+		$result['product_items'] = [
+			[
+				'sku'   => '1471163101142',
+				'stock' =>  '100',
+			],
+			[
+				'sku'   => '1471163012022',
+				'stock' =>  '0',
+			],
+			[
+				'sku'   => '1471163012112',
+				'stock' =>  '200',
+			],
+			[
+				'sku'   => '1471163012122',
+				'stock' =>  '300',
+			],
+			[
+				'sku'   => '1471163012102',
+				'stock' =>  '400',
+			],
+			[
+				'sku'   => '14711639999',
+				'stock' =>  '4',
+			],
+		];*/
+
+		$this->products_updater->set_product_items( $this->webservice_data['product_items'] );
+		$this->products_updater->set_first_product_counts( $this->webservice_data['count'] );
+		$this->products_updater->register_add_action();
+
 	}
 
 	/**
@@ -332,105 +459,6 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		}
 
 		$this->admin_notices['wrong_url_notice']->register_add_action();
-
-	}
-
-	/**
-	 * Check last n line  in log-execution file
-	 *
-	 * @return bool
-	 */
-	private function check_execution_file_end( $message, $line_number = 4, $file = SIAWOOD_PRODUCTS_EXECUTION_LOG ) {
-		$result = $this->get_file_end( $file, $line_number );
-		if ( preg_match( "/$message/", $result ) ) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-	/**
-	 * Method to log during plugin execution
-	 *
-	 * @param Log_In_Footer $log_in_footer_object Object of Log_In_Footer class
-	 * @param string        $log_message          Log message that you need to write in log file
-	 * @param string        $file_name            The path of log file that you need to write on
-	 * @param string        $type                 Type of log file which is use in Logger trait method
-	 */
-	public function write_log_during_execution( Log_In_Footer $log_in_footer_object, string $log_message, string $file_name, string $type ) {
-		$args                = [];
-		$args['log_message'] = $log_message;
-		$args['file_name']   = $file_name;
-		$args['type']        = $type;
-		$log_in_footer_object->register_add_action_with_arguments( $args );
-
-	}
-
-	/**
-	 * Tasks when we have webservice issues.
-	 */
-	private function set_tasks_when_webservice_not_accessible( Log_In_Footer $log_in_footer_object, $log_message ) {
-		if ( false === $this->writing_log_status_for_webservice_issues || 'no' === $this->writing_log_status_for_webservice_issues
-		     || $this->check_execution_file_end( 'Warning for problem in accessing to webservice' )
-		) {
-			$this->log_in_footer = $log_in_footer_object;
-			$this->write_log_during_execution(
-				$this->log_in_footer,
-				$log_message,
-				SIAWOOD_PRODUCTS_EXECUTION_LOG,
-				'Warning for problem in accessing to webservice'
-			);
-			$notification_email = new Custom_Email( 'webservice_is_not_accessible', $this->get_email_subjects(), $this->get_email_templates() );
-			$notification_email->register_add_filter_with_arguments( $this->log_in_footer, 'not accessible webservice' );
-			update_option( 'swdprd_has_log_for_wrong_url', 'no' );
-			update_option( 'swdprd_has_log_for_webservice_issue', 'yes' );
-		}
-
-	}
-
-	/**
-	 * Run updater to update stock amounts for all products in Woocommerce
-	 */
-	private function run_stock_updater() {
-		//$result = $this->get_webservice_data( 'http://94.139.176.26:890/api/stock' ); //sample to test http request errors
-
-		//$result = $this->get_webservice_data( $this->webservice_address );
-
-		if ( 'yes' === $this->writing_log_status_for_webservice_issues ) {
-			update_option( 'swdprd_has_log_for_webservice_issue', 'no' );
-		}
-		//$this->update_stocks_amount( new Log_In_Footer(), $result['product_items'], $result['count'] );
-		/*$result['product_items'] = null;
-		$result['product_items'] = [
-			[
-				'sku'   => '1471163101142',
-				'stock' =>  '100',
-			],
-			[
-				'sku'   => '1471163012022',
-				'stock' =>  '0',
-			],
-			[
-				'sku'   => '1471163012112',
-				'stock' =>  '200',
-			],
-			[
-				'sku'   => '1471163012122',
-				'stock' =>  '300',
-			],
-			[
-				'sku'   => '1471163012102',
-				'stock' =>  '400',
-			],
-			[
-				'sku'   => '14711639999',
-				'stock' =>  '4',
-			],
-		];*/
-
-		$this->products_updater->set_product_items( $this->webservice_data['product_items'] );
-		$this->products_updater->set_first_product_counts( $this->webservice_data['count'] );
-		$this->products_updater->register_add_action();
 
 	}
 

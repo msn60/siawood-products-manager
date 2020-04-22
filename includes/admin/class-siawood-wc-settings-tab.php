@@ -103,6 +103,7 @@ class Siawood_WC_Settings_Tab extends \WC_Settings_Page {
 				break;
 			case 'manual_update':
 				$settings = $this->get_siawood_manual_update_settings_page_elements( $prefix );
+				//$this->load_template( 'settings-page.manual-update-section' );
 				break;
 			default:
 				$settings = $this->get_siawood_general_settings_page_elements( $prefix );
