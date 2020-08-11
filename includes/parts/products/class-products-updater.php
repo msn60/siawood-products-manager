@@ -149,6 +149,8 @@ class Products_Updater implements Action_Hook_Interface {
 			$this->success_update_products_count,
 			$this->fail_update_products_count,
 		];*/
+
+
 		$this->set_tasks_after_update_process(
 			new Custom_Email(
 				'successful_stock_update',
@@ -197,7 +199,11 @@ class Products_Updater implements Action_Hook_Interface {
 			'Success Products in Update Process'
 		);
 
-		$email->register_add_filter_with_arguments( $log_in_footer_object, 'product update process' );
+		if ( 'yes' === get_option( 'swdprd_is_need_send_email_after_update' )) {
+			$email->register_add_filter_with_arguments( $log_in_footer_object, 'product update process' );
+		}
+
+
 
 
 	}

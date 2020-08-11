@@ -47,10 +47,16 @@ class Siawood_WC_Settings_Tab extends \WC_Settings_Page {
 	use Siawood_Initial_Values;
 	use Template_Builder;
 
+	/**
+	 * @var string $prefix Prefix for setting which is saved in options table
+	 */
+	private $prefix;
+
 	public function __construct() {
 
 		$this->id    = 'siawood';
 		$this->label = __( 'سیاوود', SIAWOOD_PRODUCTS_TEXTDOMAIN );
+		$this->prefix   = 'swdprd_';
 
 		// Define all hooks instead of inheriting from parent
 		add_filter( 'woocommerce_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
@@ -93,7 +99,7 @@ class Siawood_WC_Settings_Tab extends \WC_Settings_Page {
 	public function get_settings() {
 
 		global $current_section;
-		$prefix   = 'swdprd_';
+
 		$settings = [];
 
 		switch ( $current_section ) {
@@ -102,11 +108,11 @@ class Siawood_WC_Settings_Tab extends \WC_Settings_Page {
 				$this->load_template( 'settings-page.log-section' );
 				break;
 			case 'manual_update':
-				$settings = $this->get_siawood_manual_update_settings_page_elements( $prefix );
+				$settings = $this->get_siawood_manual_update_settings_page_elements( $this->prefix );
 				//$this->load_template( 'settings-page.manual-update-section' );
 				break;
 			default:
-				$settings = $this->get_siawood_general_settings_page_elements( $prefix );
+				$settings = $this->get_siawood_general_settings_page_elements( $this->prefix );
 		}
 
 		return apply_filters( 'woocommerce_get_settings_' . $this->id, $settings, $current_section );

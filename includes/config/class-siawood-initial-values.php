@@ -135,11 +135,20 @@ trait Siawood_Initial_Values {
 				'desc_tip' => __( 'آدرس ایمیلی که اطلاعات مرتبط با پلاگین به آن ارسال می شود، در این قسمت وارد می شود', SIAWOOD_PRODUCTS_TEXTDOMAIN )
 			],
 			[
-				'id'       => $prefix . 'is_need_send_email_daily',
-				'name'     => __( 'تنظیمات ارسال ایمیل', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'id'       => $prefix . 'is_need_send_email_after_update',
+				'name'     => __( 'ارسال ایمیل بعد از آپدیت', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
 				'type'     => 'checkbox',
 				'desc'     => __( 'ارسال ایمیل بعد از انجام آپدیت موجودی محصولات', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
 				'desc_tip' => __( 'در صورتی که می خواهید بعد از هر بار آپدیت موجودی، با ایمیل به شما اطلاع رسانی شود، این گزینه را فعال کنید',
+					SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'default'  => 'yes'
+			],
+			[
+				'id'       => $prefix . 'is_need_send_email_for_warning',
+				'name'     => __( 'ارسال ایمیل های هشدار', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'type'     => 'checkbox',
+				'desc'     => __( 'ارسال ایمیل در صورت وجود داشتن هشدار', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'desc_tip' => __( 'در صورتی که می خواهید با فعال نبودن ووکامرس یا در دسترس نبودن سرویس، با ایمیل به شما اطلاع رسانی شود، این گزینه را فعال کنید',
 					SIAWOOD_PRODUCTS_TEXTDOMAIN ),
 				'default'  => 'yes'
 			],

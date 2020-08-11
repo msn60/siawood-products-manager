@@ -363,3 +363,93 @@ Number of success updated product: 1240
 Number of failed updated product: 2531
 
 
+Log message of : Update process results [on 2020-04-23  17:01:08]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2561
+
+
+Log message of : Update process results [on 2020-04-25  11:43:20]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2561
+
+
+Log message of : Update process results [on 2020-04-26  10:52:55]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2561
+
+
+Log message of : Update process results [on 2020-05-10  20:36:34]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2673
+
+
+Log message of : Update process results [on 2020-05-10  21:10:23]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2673
+
+
+Log message of : Update process results [on 2020-05-31  12:47:03]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2808
+
+
+Log message of : Update process results [on 2020-06-27  22:15:29]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2896
+
+
+Log message of : Update process results [on 2020-07-14  18:53:41]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 2999
+
+
+Log message of : Warning for problem in accessing to webservice [on 2020-07-18  17:16:56]
+cURL error 28: Connection timed out after 10006 milliseconds
+
+Log message of : Update process results [on 2020-07-21  18:41:07]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3011
+
+
+Log message of : Update process results [on 2020-08-11  14:07:37]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3094
+
+
+Log message of : Update process results [on 2020-08-11  15:01:23]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3094
+
+
+Log message of : Warning for not executing plugin process [on 2020-08-11  17:36:28]
+Woocommerce plugin is not active. Due to this reason, this plugin can not run normally!!!
+
+Log message of : Warning for not executing plugin process [on 2020-08-11  17:43:47]
+Woocommerce plugin is not active. Due to this reason, this plugin can not run normally!!!
+
+Log message of : Warning for not executing plugin process [on 2020-08-11  17:46:45]
+Woocommerce plugin is not active. Due to this reason, this plugin can not run normally!!!
+
+Log message of : Update process results [on 2020-08-11  17:54:27]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3094
+
+
+Log message of : Update process results [on 2020-08-11  17:57:02]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3094
+
+

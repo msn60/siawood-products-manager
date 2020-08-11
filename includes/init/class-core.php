@@ -18,9 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Siawood_Products\Includes\Abstracts\{
-	Admin_Notice, Shortcode
-};
+use Siawood_Products\Includes\Abstracts\Admin_Notice;
 
 use Siawood_Products\Includes\Config\Email_Initial_Values;
 use Siawood_Products\Includes\Hooks\Filters\Custom_Cron_Schedule;
@@ -85,11 +83,6 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 * @var Products_Updater $products_updater Object  to keep product updater class
 	 */
 	protected $products_updater;
-
-	/**
-	 * @var Shortcode[] $shortcodes
-	 */
-	protected $shortcodes;
 
 	/**
 	 * @var Initial_Value $initial_values An object  to keep all of initial values for plugin
@@ -171,9 +164,8 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		/*Custom_Cron_Schedule $custom_cron_schedule = null,
 		Init_Functions $init_functions = null,
 		I18n $plugin_i18n = null,*/
-		Admin_Hook $admin_hooks = null,
+		Admin_Hook $admin_hooks,
 		Products_Updater $products_updater,
-		array $shortcodes = null,
 		array $admin_notices = null
 
 	) {
@@ -194,7 +186,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->admin_hooks = $admin_hooks;
 		}
 
-		if ( ! is_null( $admin_hooks ) ) {
+		if ( ! is_null( $products_updater ) ) {
 			$this->products_updater = $products_updater;
 		}
 
@@ -202,9 +194,6 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->custom_cron_schedule = $custom_cron_schedule;
 		}*/
 
-		if ( ! is_null( $shortcodes ) ) {
-			$this->shortcodes = $this->check_array_by_parent_type( $shortcodes, Shortcode::class )['valid'];;
-		}
 		if ( ! is_null( $admin_notices ) ) {
 			$this->admin_notices = $this->check_array_by_parent_type_assoc( $admin_notices, Admin_Notice::class )['valid'];;
 		}
@@ -236,7 +225,6 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->register_add_filter();
 			$this->start_updater_tasks();
 			//$this->for_testing();
-			//$this->set_shortcodes();
 		} else {
 
 			$this->set_tasks_when_woo_is_disable( new Log_In_Footer() );
@@ -326,8 +314,11 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 				SIAWOOD_PRODUCTS_EXECUTION_LOG,
 				'Warning for problem in accessing to webservice'
 			);
-			$notification_email = new Custom_Email( 'webservice_is_not_accessible', $this->get_email_subjects(), $this->get_email_templates() );
-			$notification_email->register_add_filter_with_arguments( $this->log_in_footer, 'not accessible webservice' );
+			if ( 'yes' === get_option( 'swdprd_is_need_send_email_for_warning' ) ) {
+				$notification_email = new Custom_Email( 'webservice_is_not_accessible', $this->get_email_subjects(), $this->get_email_templates() );
+				$notification_email->register_add_filter_with_arguments( $this->log_in_footer, 'not accessible webservice' );
+			}
+
 			update_option( 'swdprd_has_log_for_wrong_url', 'no' );
 			update_option( 'swdprd_has_log_for_webservice_issue', 'yes' );
 		}
@@ -475,9 +466,11 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 				SIAWOOD_PRODUCTS_EXECUTION_LOG,
 				'Warning for not executing plugin process'
 			);
+			if ( 'yes' === get_option( 'swdprd_is_need_send_email_for_warning' ) ) {
+				$notification_email = new Custom_Email( 'woocommerce_disable', $this->get_email_subjects(), $this->get_email_templates() );
+				$notification_email->register_add_filter_with_arguments( $this->log_in_footer, 'disabling woocommerce' );
+			}
 
-			$notification_email = new Custom_Email( 'woocommerce_disable', $this->get_email_subjects(), $this->get_email_templates() );
-			$notification_email->register_add_filter_with_arguments( $this->log_in_footer, 'disabling woocommerce' );
 			update_option( 'swdprd_has_log_for_deactivating_woocommerce', 'yes' );
 		}
 		$this->admin_notices['woocommerce_deactivate_notice']->register_add_action();
@@ -546,19 +539,6 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		}
 	}
 
-	/**
-	 * Method to set all of needed shortcodes for your plugin
-	 *
-	 * @access private
-	 * @since  1.0.1
-	 */
-	private function set_shortcodes() {
-		if ( ! is_null( $this->shortcodes ) ) {
-			foreach ( $this->shortcodes as $shortcode ) {
-				$shortcode->register_add_action();
-			}
-		}
-	}
 
 	/**
 	 * Method to show all of needed admin notice in admin panel
