@@ -172,7 +172,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		if ( defined( 'SIAWOOD_PRODUCTS_VERSION' ) ) {
 			$this->plugin_version = SIAWOOD_PRODUCTS_VERSION;
 		} else {
-			$this->plugin_version = '1.0.1';
+			$this->plugin_version = '1.2.0';
 		}
 		if ( defined( 'SIAWOOD_PRODUCTS_PLUGIN' ) ) {
 			$this->plugin_name = SIAWOOD_PRODUCTS_PLUGIN;
@@ -231,7 +231,7 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 
 		}
 		// TODO: Archive log file if larger than 2Ming
-
+		//add_action('woocommerce_loaded', [ $this , 'msn_test_hook']);
 	}
 
 	/**
@@ -485,9 +485,11 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	}
 
 	public function add_woocommerce_setting_page() {
-		$settings[] = include_once SIAWOOD_PRODUCTS_PATH . 'includes/admin/class-siawood-wc-settings-tab.php';
-
-		return $settings;
+		if ( current_user_can('manage_options') or current_user_can('manage_woocommerce')) {
+			$settings[] = include_once SIAWOOD_PRODUCTS_PATH . 'includes/admin/class-siawood-wc-settings-tab.php';
+			return $settings;
+		}
+		return false;
 	}
 
 	public function get_product_list_from_api( $product_items, $log_in_footer_object ) {

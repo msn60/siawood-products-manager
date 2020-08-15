@@ -107,7 +107,7 @@ class Products_Updater implements Action_Hook_Interface {
 	 */
 	public function register_add_action() {
 		add_filter( 'swdprd_params_for_template', [ $this, 'filter_template_params' ] );
-		add_action( 'plugins_loaded', [ $this, 'update_stocks_amount' ] );
+		add_action( 'woocommerce_loaded', [ $this, 'update_product_variation_data' ] );
 		if ( is_admin() ) {
 			add_action( 'admin_footer', [ $this, 'update_last_update_option' ], 999 );
 		} else {
@@ -123,11 +123,11 @@ class Products_Updater implements Action_Hook_Interface {
 		];
 	}
 
-	public function update_stocks_amount() {
+	public function update_product_variation_data() {
 
 		foreach ( $this->product_items as $item ) {
-			$id = (int) \wc_get_product_id_by_sku( $item['sku'] );
-			if ( false == $id ) {
+			$id = (int) wc_get_product_id_by_sku( $item['sku'] );
+			if ( false == $id || $item['stock'] < 0 ) {
 				$this->fail_update_products_count ++;
 				$this->fail_update_product_items[] .= $item['sku'];
 
@@ -138,6 +138,7 @@ class Products_Updater implements Action_Hook_Interface {
 				} else {
 					update_post_meta( $id, '_stock_status', 'instock' );
 				}
+				wc_delete_product_transients( $id );
 				$this->success_update_products_count ++;
 				$this->success_update_product_items[] .= $item['sku'];
 
@@ -149,7 +150,6 @@ class Products_Updater implements Action_Hook_Interface {
 			$this->success_update_products_count,
 			$this->fail_update_products_count,
 		];*/
-
 
 		$this->set_tasks_after_update_process(
 			new Custom_Email(

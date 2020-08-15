@@ -29,3 +29,18 @@ This plugin can do these tasks in the following:
 
 1. Activate the plugin inside WordPress admin panel
 2. In the future...
+
+
+## Change logs:
+
+> Version: 1.2.0 
+
+```
+Changes in version 1.2.0:
+1. Add new option to disable sending email after updating products 
+2. Add new option to disable sendning email for warning (like disabling woocommerce or problem in web service)
+3. Change process of products update
+4. Show management admin menu only for administrators
+5. Check stock number and deny it if it has negative value
+
+```

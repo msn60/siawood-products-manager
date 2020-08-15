@@ -453,3 +453,81 @@ Number of success updated product: 1240
 Number of failed updated product: 3094
 
 
+Log message of : Update process results [on 2020-08-12  12:34:03]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3094
+
+
+Log message of : Update process results [on 2020-08-15  12:25:38]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3094
+
+
+Log message of : Update process results [on 2020-08-15  17:22:26]
+Update process is succesfully done
+Number of success updated product: 1237
+Number of failed updated product: 3094
+
+
+Log message of : Update process results [on 2020-08-15  17:30:39]
+Update process is succesfully done
+Number of success updated product: 1237
+Number of failed updated product: 3097
+
+
+Log message of : Update process results [on 2020-08-15  17:32:58]
+Update process is succesfully done
+Number of success updated product: 1237
+Number of failed updated product: 3097
+
+
+Log message of : Update process results [on 2020-08-15  17:39:01]
+Update process is succesfully done
+Number of success updated product: 0
+Number of failed updated product: 0
+
+
+Log message of : Update process results [on 2020-08-15  17:51:46]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3094
+
+
+Log message of : Update process results [on 2020-08-15  17:58:11]
+Update process is succesfully done
+Number of success updated product: 4331
+Number of failed updated product: 3
+
+
+Log message of : Update process results [on 2020-08-15  18:11:22]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3120
+
+
+Log message of : Update process results [on 2020-08-15  18:18:04]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3120
+
+
+Log message of : Update process results [on 2020-08-15  18:30:23]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3120
+
+
+Log message of : Update process results [on 2020-08-15  18:43:04]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3120
+
+
+Log message of : Update process results [on 2020-08-15  18:57:35]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3120
+
+

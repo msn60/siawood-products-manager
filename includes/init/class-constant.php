@@ -167,7 +167,7 @@ class Constant {
 		 * It defines version of plugin for management tasks in your plugin
 		 */
 		if ( ! defined( 'SIAWOOD_PRODUCTS_VERSION' ) ) {
-			define( 'SIAWOOD_PRODUCTS_VERSION', '1.0.1' );
+			define( 'SIAWOOD_PRODUCTS_VERSION', '1.2.0' );
 		}
 
 		/**

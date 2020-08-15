@@ -59,8 +59,9 @@ trait Web_Service {
 		$count         = 0;
 		foreach ( $result as $item ) {
 			$product_items[] = [
-				'sku'   => $item->_Barcode,
-				'stock' => (string) $item->_Stock,
+				'sku'           => $item->_Barcode,
+				'stock'         => (string) $item->_Stock,
+				'regular_price' => (string) $item->_MainPrice,
 			];
 			$count ++;
 		}
