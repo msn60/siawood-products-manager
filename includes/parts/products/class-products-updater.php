@@ -123,6 +123,13 @@ class Products_Updater implements Action_Hook_Interface {
 		];
 	}
 
+	/**
+	 * Update all of products (got from web service)
+	 *
+	 * @see https://stackoverflow.com/questions/51940338/updating-product-stock-programmatically-in-woocommerce-3
+	 * @see https://stackoverflow.com/questions/52937409/create-programmatically-a-product-using-crud-methods-in-woocommerce-3
+	 *
+	 */
 	public function update_product_variation_data() {
 
 		foreach ( $this->product_items as $item ) {

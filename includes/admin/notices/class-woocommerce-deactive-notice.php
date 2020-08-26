@@ -42,7 +42,7 @@ class Woocommerce_Deactive_Notice extends Admin_Notice {
 	 */
 	public function show_admin_notice() {
 		?>
-        <div class="notice notice-error">
+        <div class="notice notice-error is-dismissible">
             <p>
 				<?php _e(
 					'متاسفانه پلاگین ووکامرس فعال نیست. به همین دلیل موجودی اجناس در سایت نمی تواند آپدیت شود. برای استفاده از پلاگین، حتما ووکامرس را فعال نمایید',

@@ -148,6 +148,10 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 * @var bool $is_need_manual_update
 	 */
 	protected $is_need_manual_update;
+	/**
+	 * @var bool $only_update_manually Options to detect do you need automatically update or not
+	 */
+	protected $only_update_manually;
 
 
 	/**
@@ -224,14 +228,11 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->register_add_action();
 			$this->register_add_filter();
 			$this->start_updater_tasks();
-			//$this->for_testing();
 		} else {
 
 			$this->set_tasks_when_woo_is_disable( new Log_In_Footer() );
 
 		}
-		// TODO: Archive log file if larger than 2Ming
-		//add_action('woocommerce_loaded', [ $this , 'msn_test_hook']);
 	}
 
 	/**
@@ -262,10 +263,11 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		if ( $this->is_need_manual_update ) {
 			$this->run_webservice_tasks();
 		} else {
-			if ( $this->check_before_start_update() ) {
+			if ( $this->check_before_start_update() && is_admin() ) {
 				$this->run_webservice_tasks();
 			}
 		}
+
 		/*if ( $this->check_before_start_update() ) {
 			set_time_limit( 3000 );
 			$this->webservice_data = $this->get_webservice_data( $this->webservice_address );
@@ -282,6 +284,11 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 		$this->writing_log_status_for_wrong_url         = get_option( 'swdprd_has_log_for_wrong_url' );
 		$this->writing_log_status_for_webservice_issues = get_option( 'swdprd_has_log_for_webservice_issue' );
 		$this->webservice_address                       = get_option( 'swdprd_webservice_ip_address' );
+		if ( 'yes' === get_option( 'swdprd_only_update_manual' ) ) {
+			$this->only_update_manually = true;
+		} else {
+			$this->only_update_manually = false;
+		}
 		date_default_timezone_set( 'Asia/Tehran' );
 		$this->last_update   = get_option( 'swdprd_last_update' );
 		$this->now_date_time = [
@@ -360,41 +367,10 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 * Run updater to update stock amounts for all products in Woocommerce
 	 */
 	private function run_stock_updater() {
-		//$result = $this->get_webservice_data( 'http://94.139.176.26:890/api/stock' ); //sample to test http request errors
-
-		//$result = $this->get_webservice_data( $this->webservice_address );
 
 		if ( 'yes' === $this->writing_log_status_for_webservice_issues ) {
 			update_option( 'swdprd_has_log_for_webservice_issue', 'no' );
 		}
-		//$this->update_stocks_amount( new Log_In_Footer(), $result['product_items'], $result['count'] );
-		/*$result['product_items'] = null;
-		$result['product_items'] = [
-			[
-				'sku'   => '1471163101142',
-				'stock' =>  '100',
-			],
-			[
-				'sku'   => '1471163012022',
-				'stock' =>  '0',
-			],
-			[
-				'sku'   => '1471163012112',
-				'stock' =>  '200',
-			],
-			[
-				'sku'   => '1471163012122',
-				'stock' =>  '300',
-			],
-			[
-				'sku'   => '1471163012102',
-				'stock' =>  '400',
-			],
-			[
-				'sku'   => '14711639999',
-				'stock' =>  '4',
-			],
-		];*/
 
 		$this->products_updater->set_product_items( $this->webservice_data['product_items'] );
 		$this->products_updater->set_first_product_counts( $this->webservice_data['count'] );
@@ -416,8 +392,10 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			if ( 'yes' === $this->writing_log_status_for_wrong_url ) {
 				update_option( 'swdprd_has_log_for_wrong_url', 'no' );
 			}
-			if ( strtotime( $this->now_date_time['date'] ) > strtotime( $this->last_update['date'] )
-			     || $this->check_execution_file_end( $this->now_date_time['date'], 20 )
+			if (
+				( strtotime( $this->now_date_time['date'] ) > strtotime( $this->last_update['date'] )
+				  || $this->check_execution_file_end( $this->now_date_time['date'], 20 ) )
+				&& ! $this->only_update_manually
 
 			) {
 				return true;

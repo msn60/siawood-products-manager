@@ -531,3 +531,21 @@ Number of success updated product: 1240
 Number of failed updated product: 3120
 
 
+Log message of : Update process results [on 2020-08-24  14:18:51]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3140
+
+
+Log message of : Update process results [on 2020-08-25  10:50:39]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3140
+
+
+Log message of : Update process results [on 2020-08-26  14:45:34]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3162
+
+

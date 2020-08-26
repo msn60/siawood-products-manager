@@ -42,7 +42,7 @@ class Wrong_Url_Notice extends Admin_Notice {
 	 */
 	public function show_admin_notice() {
 		?>
-        <div class="notice notice-error">
+        <div class="notice notice-error is-dismissible">
             <p>
 				<?php _e(
 					'تنظیمات URL برای وب سرویس صحیح نیست و پلاگین مدیریت موجودی کالای سیاوود، نمی تواند اجرا شود. برای اجرای آن، تنظیمات را حتما بررسی کنید و آدرس صحیح وارد کنید',

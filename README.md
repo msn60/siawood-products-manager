@@ -42,5 +42,7 @@ Changes in version 1.2.0:
 3. Change process of products update
 4. Show management admin menu only for administrators
 5. Check stock number and deny it if it has negative value
+6. Execute only in admin panel
+7. Add new option to only update manually
 
 ```

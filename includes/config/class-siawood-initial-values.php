@@ -153,6 +153,15 @@ trait Siawood_Initial_Values {
 				'default'  => 'yes'
 			],
 			[
+				'id'       => $prefix . 'only_update_manual',
+				'name'     => __( 'فرآیند آپدیت محصولات', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'type'     => 'checkbox',
+				'desc'     => __( 'آپدیت محصولات فقط به صورت دستی', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'desc_tip' => __( 'در صورتی که می خواهید فقط محصولات به صورت دستی آپدیت شوند، این گزینه را فعال کنید',
+					SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'default'  => 'no'
+			],
+			[
 				'id'   => '',
 				'name' => __( 'تنظیمات ایمیل', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
 				'type' => 'sectionend',
