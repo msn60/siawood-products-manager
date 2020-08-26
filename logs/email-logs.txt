@@ -478,3 +478,18 @@ Sending email for product update process was  Successful.
 Log message of : Sending email for disabling Woocommerce [on 2020-08-26  14:45:39]
 Sending email for product update process was  Successful.
 
+Log message of : Sending email for disabling Woocommerce [on 2020-08-26  16:03:11]
+Sending email for product update process was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-08-26  16:05:02]
+Sending email for product update process was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-08-26  16:06:44]
+Sending email for product update process was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-08-26  18:26:06]
+Sending email for product update process was  Successful.
+
+Log message of : Sending email for disabling Woocommerce [on 2020-08-26  18:27:51]
+Sending email for product update process was  Successful.
+

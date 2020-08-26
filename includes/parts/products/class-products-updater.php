@@ -152,12 +152,6 @@ class Products_Updater implements Action_Hook_Interface {
 			}
 		}
 
-		/*$email_template                                      = $this->get_email_templates();
-		$email_template['successful_stock_update']['params'] = [
-			$this->success_update_products_count,
-			$this->fail_update_products_count,
-		];*/
-
 		$this->set_tasks_after_update_process(
 			new Custom_Email(
 				'successful_stock_update',
@@ -184,27 +178,30 @@ class Products_Updater implements Action_Hook_Interface {
 			'Update process results'
 		);
 
-		$fail_product_log = '';
-		foreach ( $this->fail_update_product_items as $key => $item ) {
-			$fail_product_log .= $item . PHP_EOL;
-		}
-		$this->write_log_during_execution(
-			$log_in_footer_object,
-			$fail_product_log,
-			SIAWOOD_PRODUCTS_LOGS . 'product-items/fail-products-' . date( 'Y-m-d_H-i' ) . '.txt',
-			'Fail Products in Update Process'
-		);
+		if ( 'yes' === get_option( 'swdprd_is_need_log_for_success_failed_products' )) {
+			$fail_product_log = '';
+			foreach ( $this->fail_update_product_items as $key => $item ) {
+				$fail_product_log .= $item . PHP_EOL;
+			}
+			$this->write_log_during_execution(
+				$log_in_footer_object,
+				$fail_product_log,
+				SIAWOOD_PRODUCTS_LOGS . 'product-items/fail-products-' . date( 'Y-m-d_H-i' ) . '.txt',
+				'Fail Products in Update Process'
+			);
 
-		$success_product_log = '';
-		foreach ( $this->success_update_product_items as $key => $item ) {
-			$success_product_log .= $item . PHP_EOL;
+			$success_product_log = '';
+			foreach ( $this->success_update_product_items as $key => $item ) {
+				$success_product_log .= $item . PHP_EOL;
+			}
+			$this->write_log_during_execution(
+				$log_in_footer_object,
+				$success_product_log,
+				SIAWOOD_PRODUCTS_LOGS . 'product-items/success-products-' . date( 'Y-m-d_H-i' ) . '.txt',
+				'Success Products in Update Process'
+			);
 		}
-		$this->write_log_during_execution(
-			$log_in_footer_object,
-			$success_product_log,
-			SIAWOOD_PRODUCTS_LOGS . 'product-items/success-products-' . date( 'Y-m-d_H-i' ) . '.txt',
-			'Success Products in Update Process'
-		);
+
 
 		if ( 'yes' === get_option( 'swdprd_is_need_send_email_after_update' )) {
 			$email->register_add_filter_with_arguments( $log_in_footer_object, 'product update process' );

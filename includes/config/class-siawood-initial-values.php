@@ -162,6 +162,15 @@ trait Siawood_Initial_Values {
 				'default'  => 'no'
 			],
 			[
+				'id'       => $prefix . 'is_need_log_for_success_failed_products',
+				'name'     => __( 'لاگ لیست محصولات', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'type'     => 'checkbox',
+				'desc'     => __( 'ثبت لیست کلیه محصولات آپدیت شده و آپدیت نشده', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'desc_tip' => __( 'در صورتی که می خواهید لیست همه محصولاتی که آپدیت شده یا نشده اند را لاگ کنید، این گزینه را فعال نمایید',
+					SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'default'  => 'no'
+			],
+			[
 				'id'   => '',
 				'name' => __( 'تنظیمات ایمیل', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
 				'type' => 'sectionend',

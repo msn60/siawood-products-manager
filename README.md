@@ -44,5 +44,6 @@ Changes in version 1.2.0:
 5. Check stock number and deny it if it has negative value
 6. Execute only in admin panel
 7. Add new option to only update manually
+8. Add new option to log success and fail products in update process
 
 ```

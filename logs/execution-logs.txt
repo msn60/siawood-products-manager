@@ -549,3 +549,33 @@ Number of success updated product: 1240
 Number of failed updated product: 3162
 
 
+Log message of : Update process results [on 2020-08-26  16:03:06]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3162
+
+
+Log message of : Update process results [on 2020-08-26  16:04:58]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3162
+
+
+Log message of : Update process results [on 2020-08-26  16:06:40]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3162
+
+
+Log message of : Update process results [on 2020-08-26  18:26:02]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3162
+
+
+Log message of : Update process results [on 2020-08-26  18:27:47]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3162
+
+
