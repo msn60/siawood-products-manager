@@ -26,8 +26,16 @@ use Siawood_Products\Includes\Interfaces\{
 	Action_Hook_Interface, Filter_Hook_Interface
 };
 use Siawood_Products\Includes\Config\Initial_Value;
-use Siawood_Products\Includes\Functions\{
-	Check_Woocommerce, File_End_Reader, Init_Functions, Logger, Url_Checker, Utility, Check_Type, Web_Service, Log_In_Footer
+use Siawood_Products\Includes\Functions\{Check_Woocommerce,
+	File_End_Reader,
+	File_Remove_From_Specific_Time,
+	Init_Functions,
+	Logger,
+	Url_Checker,
+	Utility,
+	Check_Type,
+	Web_Service,
+	Log_In_Footer
 };
 
 use Siawood_Products\Includes\Parts\Email\Custom_Email;
@@ -56,6 +64,8 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	use Url_Checker;
 	use Email_Initial_Values;
 	use File_End_Reader;
+	use File_Remove_From_Specific_Time;
+
 	/**
 	 * The unique identifier of this plugin.
 	 *
@@ -152,7 +162,14 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 * @var bool $only_update_manually Options to detect do you need automatically update or not
 	 */
 	protected $only_update_manually;
-
+	/**
+	 * @var bool $is_need_remove_extra_update_success_logs To remove extra log files for list of success and fail products
+	 */
+	protected $is_need_remove_extra_update_success_logs;
+	/**
+	 * @var bool $is_need_archive_log_files To archive log files and remove them more than 3 months
+	 */
+	protected $is_need_archive_log_files;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -204,13 +221,31 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 
 		$this->writing_log_status_for_woo_disabling = get_option( 'swdprd_has_log_for_deactivating_woocommerce' );
 		if ( isset( $_POST ) && ! empty( $_POST ) ) {
-			if ( isset($_POST['swdprd_is_need_update_stock_manually']) && '1' === $_POST['swdprd_is_need_update_stock_manually'] ) {
+			if ( isset( $_POST['swdprd_is_need_update_stock_manually'] ) && '1' === $_POST['swdprd_is_need_update_stock_manually'] ) {
 				$this->is_need_manual_update = true;
 			} else {
 				$this->is_need_manual_update = false;
 			}
+
+			if ( isset( $_POST['swdprd_is_need_remove_extra_update_success_logs'] )
+			     && '1' === $_POST['swdprd_is_need_remove_extra_update_success_logs']
+			) {
+				$this->is_need_remove_extra_update_success_logs = true;
+			} else {
+				$this->is_need_remove_extra_update_success_logs = false;
+			}
+
+			if ( isset( $_POST['swdprd_is_need_archive_large_files'] )
+			     && '1' === $_POST['swdprd_is_need_archive_large_files']
+			) {
+				$this->is_need_archive_log_files = true;
+			} else {
+				$this->is_need_archive_log_files = false;
+			}
 		} else {
-			$this->is_need_manual_update = false;
+			$this->is_need_manual_update                    = false;
+			$this->is_need_remove_extra_update_success_logs = false;
+			$this->is_need_archive_log_files                = false;
 		}
 	}
 
@@ -233,6 +268,48 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 			$this->set_tasks_when_woo_is_disable( new Log_In_Footer() );
 
 		}
+
+		if ( $this->is_need_remove_extra_update_success_logs ) {
+			$this->remove_extra_update_success_fail_logs();
+		}
+
+		if ( $this->is_need_archive_log_files ) {
+			$this->archive_log_files();
+		}
+	}
+
+	/**
+	 * Remove Extra files for list of success and fail products in update process
+	 */
+	protected function remove_extra_update_success_fail_logs() {
+		$path = SIAWOOD_PRODUCTS_LOGS . 'product-items/';
+		$time = 60 * 60 * 24 * 14;
+		$this->remove_extra_files_from_time( $path, $time );
+	}
+
+	/**
+	 * Archive log files larger than 200Kb & remove them more than 3 month
+	 */
+	protected function archive_log_files() {
+		/**
+		 * archive section
+		 */
+		$files = glob( SIAWOOD_PRODUCTS_LOGS . "*" );
+		foreach ( $files as $file ) {
+			if ( is_file( $file ) && ( filesize( $file ) / 1024 > 200 ) ) {
+				$new_file_name = pathinfo( $file )['filename'] . '-' . date( 'Y-m-d_H-i' ) . '.txt';
+				copy( $file, SIAWOOD_PRODUCTS_LOGS . 'archived-log-files/' . $new_file_name );
+				fclose( fopen( $file, 'w' ) );
+
+			}
+		}
+		/**
+		 * Remove section
+		 */
+		$path = SIAWOOD_PRODUCTS_LOGS . 'archived-log-files/';
+		$time = 60 * 60 * 24 * 90;
+		$this->remove_extra_files_from_time( $path, $time );
+
 	}
 
 	/**
@@ -463,10 +540,12 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	}
 
 	public function add_woocommerce_setting_page() {
-		if ( current_user_can('manage_options') or current_user_can('manage_woocommerce')) {
+		if ( current_user_can( 'manage_options' ) or current_user_can( 'manage_woocommerce' ) ) {
 			$settings[] = include_once SIAWOOD_PRODUCTS_PATH . 'includes/admin/class-siawood-wc-settings-tab.php';
+
 			return $settings;
 		}
+
 		return false;
 	}
 
@@ -487,8 +566,8 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	 * The name of the plugin used to uniquely identify it within the context of
 	 * WordPress and to define internationalization functionality.
 	 *
-	 * @since     1.0.0
 	 * @return    string    The name of the plugin.
+	 * @since     1.0.0
 	 */
 	public function get_plugin_name() {
 		return $this->plugin_name;
@@ -497,8 +576,8 @@ class Core implements Action_Hook_Interface, Filter_Hook_Interface {
 	/**
 	 * Retrieve the version number of the plugin.
 	 *
-	 * @since     1.0.0
 	 * @return    string    The version number of the plugin.
+	 * @since     1.0.0
 	 */
 	public function get_version() {
 		return $this->plugin_version;

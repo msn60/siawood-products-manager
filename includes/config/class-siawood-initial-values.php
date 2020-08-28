@@ -116,14 +116,13 @@ trait Siawood_Initial_Values {
 				'desc_tip' => __( 'آدرس کامل وب سرویس به همراه پورت به صورت کامل، باید در این قسمت وارد شود', SIAWOOD_PRODUCTS_TEXTDOMAIN )
 			],
 			[
-				'id'   => '',
+				//'id'   => '',
 				'name' => __( 'تنظیمات وب سرویس', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
 				'type' => 'sectionend',
 				'desc' => '',
 				'id'   => $prefix . 'general_webservice_settings'
 			],
 			[
-
 				'name' => __( 'تنظیمات ایمیل', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
 				'type' => 'title',
 				'id'   => $prefix . 'general_email_settings'
@@ -153,6 +152,18 @@ trait Siawood_Initial_Values {
 				'default'  => 'yes'
 			],
 			[
+				//'id'   => '',
+				'name' => __( 'تنظیمات ایمیل', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'type' => 'sectionend',
+				'desc' => '',
+				'id'   => $prefix . 'general_email_settings'
+			],
+			[
+				'name' => __( 'سایر تنظیمات', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'type' => 'title',
+				'id'   => $prefix . 'other_settings'
+			],
+			[
 				'id'       => $prefix . 'only_update_manual',
 				'name'     => __( 'فرآیند آپدیت محصولات', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
 				'type'     => 'checkbox',
@@ -171,12 +182,12 @@ trait Siawood_Initial_Values {
 				'default'  => 'no'
 			],
 			[
-				'id'   => '',
-				'name' => __( 'تنظیمات ایمیل', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'id'   => $prefix . 'general_email_settings',
+				'name' => __( 'سایر تنظیمات', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
 				'type' => 'sectionend',
 				'desc' => '',
-				'id'   => $prefix . 'general_email_settings'
 			],
+
 
 		];
 
@@ -202,11 +213,65 @@ trait Siawood_Initial_Values {
 				'default'  => 'yes'
 			],
 			[
-				'id'   => '',
-				'name' => __( 'تنظیمات وب سرویس', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				//'id'   => '',
+				'name' => __( 'اجرای دستی بروز رسانی محصولات', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
 				'type' => 'sectionend',
 				'desc' => '',
 				'id'   => $prefix . 'manual_update_webservice_settings'
+			],
+
+
+		];
+
+		return $settings;
+	}
+
+	public function get_siawood_remove_extra_logs_settings_page_elements( $prefix ) {
+
+		$settings = [
+			[
+
+				'name' => __( 'پاک کردن فایل های اضافی لاگ شده برای فرآیند به روز رسانی', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'type' => 'title',
+				'id'   => $prefix . 'remove_files_title'
+			],
+			[
+				'id'       => $prefix . 'is_need_remove_extra_update_success_logs',
+				'name'     => __( 'حذف لیست محصولات', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'type'     => 'checkbox',
+				'desc'     => __( 'حذف لیست محصولات آپدیت شده و نشده', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'desc_tip' => __( 'با استفاده از این گزینه، کلیه فایل های این بخش پیش از دو هفته جاری، حذف خواهند شد',
+					SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'default'  => 'yes'
+			],
+			[
+				//'id'   => '',
+				'name' => __( 'پاک کردن فایل های اضافی لاگ شده برای فرآیند به روز رسانی', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'type' => 'sectionend',
+				'desc' => '',
+				'id'   => $prefix . 'remove_files_title'
+			],
+			[
+
+				'name' => __( 'آرشیو کردن و پاک کردن لاگ فایل ها', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'type' => 'title',
+				'id'   => $prefix . 'archive_and_remove_log_files'
+			],
+			[
+				'id'       => $prefix . 'is_need_archive_large_files',
+				'name'     => __( 'آرشیو فایل ها با سایز بزرگ', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'type'     => 'checkbox',
+				'desc'     => __( 'آرشیو و حذف لاگ فایل های بزرگ', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'desc_tip' => __( 'با استفاده از این گزینه، لاگ فایل های بزرگتر از 2 مگابایت آرشیو شده و بیشتر از سه ماه، حذف خواهند شد',
+					SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'default'  => 'yes'
+			],
+			[
+				//'id'   => '',
+				'name' => __( 'آرشیو کردن و پاک کردن لاگ فایل ها', SIAWOOD_PRODUCTS_TEXTDOMAIN ),
+				'type' => 'sectionend',
+				'desc' => '',
+				'id'   => $prefix . 'archive_and_remove_log_files'
 			],
 
 
