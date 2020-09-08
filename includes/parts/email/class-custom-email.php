@@ -99,9 +99,9 @@ class Custom_Email {
 		//$result = add_filter( 'init', [ $this, 'send_email' ] );
 		// TODO: check how to get fail with wp_email
 		if ( false === $result ) {
-			$this->log_sending_email_result( 'fail', $log_in_footer_object );
+			$this->log_sending_email_result( 'fail', $log_in_footer_object, $email_type );
 		} else {
-			$this->log_sending_email_result( 'success', $log_in_footer_object );
+			$this->log_sending_email_result( 'success', $log_in_footer_object, $email_type );
 		}
 	}
 
@@ -110,7 +110,7 @@ class Custom_Email {
 	 * @param  string       $type
 	 * @param Log_In_Footer $log_in_footer_object Object for log when wp_footer or admin_footer hook fires
 	 */
-	public function log_sending_email_result( $type, Log_In_Footer $log_in_footer_object ) {
+	public function log_sending_email_result( $type, Log_In_Footer $log_in_footer_object, $email_type ) {
 		$args = [];
 		if ( 'fail' === $type ) {
 			$args['log_message'] = 'Sending email for '.$this->email_type.' was not Successful!!!';
@@ -118,7 +118,7 @@ class Custom_Email {
 			$args['log_message'] = 'Sending email for '.$this->email_type.' was  Successful.';
 		}
 		$args['file_name'] = SIAWOOD_PRODUCTS_LOGS . 'email-logs.txt';
-		$args['type']      = 'Sending email for disabling Woocommerce';
+		$args['type']      = $email_type;
 		$log_in_footer_object->register_add_action_with_arguments( $args );
 
 	}

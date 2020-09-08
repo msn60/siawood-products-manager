@@ -1,0 +1,19 @@
+
+Log message of : Update process results [on 2020-09-07  00:01:01]
+Update process is succesfully done
+Number of success updated product: 2675
+Number of failed updated product: 1727
+
+
+Log message of : Update process results [on 2020-09-08  00:00:28]
+Update process is succesfully done
+Number of success updated product: 2700
+Number of failed updated product: 1702
+
+
+Log message of : Update process results [on 2020-09-08  21:58:07]
+Update process is succesfully done
+Number of success updated product: 1240
+Number of failed updated product: 3178
+
+

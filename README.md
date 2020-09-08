@@ -47,5 +47,6 @@ Changes in version 1.2.0:
 8. Add new option to log success and fail products in update process
 9. Remove extra files for list of success and fail products
 10. Archice execution logs more than 200Kb and remove it after 3 month
+11. Fix some notification issues.
 
 ```

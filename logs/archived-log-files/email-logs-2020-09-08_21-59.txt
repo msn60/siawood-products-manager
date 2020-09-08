@@ -1,0 +1,7 @@
+
+Log message of : Sending email for disabling Woocommerce [on 2020-09-08  00:00:29]
+Sending email for product update process was  Successful.
+
+Log message of : product update process [on 2020-09-08  21:58:12]
+Sending email for product update process was  Successful.
+
