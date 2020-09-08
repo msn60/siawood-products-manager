@@ -12,7 +12,7 @@
  * Plugin Name:       Siawood Products Manager
  * Plugin URI:        https://wpwebmaster.ir
  * Description:       A plugin to manage Siawood products
- * Version:           1.0.1
+ * Version:           1.2.0
  * Author:            Mehdi Soltani Neshan <soltani.n.mehdi@gmail.com>
  * Author URI:        https://wpwebmaster.ir
  * License:           GPL-2.0+
